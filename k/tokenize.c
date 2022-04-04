@@ -1,59 +1,79 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <string.h>
+#include "main.h"
 
-char **tokenize(char *s);
-int _strlen(char *s);
-
-int main(int ac, char **av)
+/**
+ * tokenize - tokenize
+ * @str: str
+ *
+ * Return: list_t
+ */
+list_t tokenize(char *str)
 {
-	// char *str = av[1], *token;
-	char **argv;
-	int i = 0;
+	char *token;
+	list_t *head;
 
-	if (ac == 1)
+	head = NULL;
+	token = strtok(str, " ");
+	while (token != NULL)
 	{
-	// 	token = strtok(str, " ");
-	// 	while (token != NULL)
-	// 	{
-	// 		printf("%s\n", token);
-	// 		token = strtok(NULL, " ");
-	// 	}
-		argv = tokenize("Hola como estas    puto sad sad sad sad  a");
-		// while (argv[i] != NULL)
-		// {
-		// 	printf("argv[%i]: %s\n", i, argv[i]);
-		// }
-
-	}
-	// return (0);
-}
-
-char **tokenize(char *s)
-{
-	char **av, *token;
-	int i = 0, counter = 0, j = 0;
-
-	while (s[i])
-	{
-		if (i == 0)
-			if (s[i] != ' ')
-				counter++;
-		if (s[i] == ' ' && (s[i + 1] != ' ' && s[i + 1] != '\0'))
-			counter++;
-		i++;
-	}
-	av = malloc(sizeof(char *) * counter);
-	i = 0;
-	token = strtok(s, " ");
-	while (i < counter)
-	{
-		av[i] = strtok(s, " ");
+		add_node_end(&head, token);
 		token = strtok(NULL, " ");
 	}
-	printf("Counter: %d\n", counter);
-	return (av);
+	return (*head);
+}
+
+/**
+ * add_node_end - adds a new node at the end of a list_t list
+ * @head: head
+ * @str: str
+ *
+ * Return: the address of the new list or NULL if it failed
+ */
+list_t *add_node_end(list_t **head, const char *str)
+{
+	char *strd = strdup(str);
+	list_t *new_node;
+	list_t *t;
+
+	if (str)
+	{
+		new_node = malloc(sizeof(list_t));
+		if (new_node == NULL)
+			return (NULL);
+		new_node->str = strd;
+		new_node->len = _strlen(str);
+		new_node->next = NULL;
+
+		if (*head == NULL)
+		{
+			*head = new_node;
+			return (*head);
+		}
+		else
+		{
+			t = *head;
+			while (t->next)
+				t = t->next;
+			t->next = new_node;
+			return (t);
+		}
+	}
+	return (NULL);
+}
+
+/**
+ * _strlen - returns the length of a string
+ * @s: the string
+ *
+ * Return: the length
+ */
+int _strlen(const char *s)
+{
+	int a = 0;
+
+	while (*s != '\0')
+	{
+		a++;
+		s++;
+	}
+	return (a);
 }
