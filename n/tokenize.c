@@ -6,18 +6,15 @@
  *
  * Return: list_t
  */
-
 list_t tokenize(char *str)
 {
 	char *token;
-	int i = 0;
 	list_t *head;
 
 	head = NULL;
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		// printf("%s\n", token);
 		add_node_end(&head, token);
 		token = strtok(NULL, " ");
 	}
@@ -25,13 +22,12 @@ list_t tokenize(char *str)
 }
 
 /**
-  * add_node_end - adds a new node at the end of a list_t list
-  * @head: head
-  * @str: str
-  *
-  * Return: the address of the new list or NULL if it failed
-  */
-
+ * add_node_end - adds a new node at the end of a list_t list
+ * @head: head
+ * @str: str
+ *
+ * Return: the address of the new list or NULL if it failed
+ */
 list_t *add_node_end(list_t **head, const char *str)
 {
 	char *strd = strdup(str);
@@ -70,7 +66,6 @@ list_t *add_node_end(list_t **head, const char *str)
  *
  * Return: the length
  */
-
 int _strlen(const char *s)
 {
 	int a = 0;
@@ -82,27 +77,3 @@ int _strlen(const char *s)
 	}
 	return (a);
 }
-
-/**
-  * print_list - prints all the elements of a list_t list
-  * @h: h
-  *
-  * Return: the number of nodes
-  */
-
-// size_t print_list(const list_t *h)
-// {
-// 	size_t ret = 0;
-
-// 	while (h != NULL)
-// 	{
-// 		if (h->str == NULL)
-// 			printf("[0] (nil)\n");
-// 		else
-// 			printf("[%d] %s\n", h->len, h->str);
-
-// 		h = h->next;
-// 		ret++;
-// 	}
-// 	return (ret);
-// }

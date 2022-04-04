@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * main - Executes a simple command
+ * @ac: Argument Counter
+ * @av: Argument Vector
+ * Return: 1 If succeed, 0 on Error.
+ */
 int main(int ac, char **av)
 {
 	size_t i = 0, c = 0;
@@ -21,7 +27,6 @@ int main(int ac, char **av)
 		argv = malloc(sizeof(char *) * 10);
 		argv[0] = malloc(sizeof(char) * head->len);
 		argv[0] = head->str;
-		printf("argv[0]: %s", argv[0]);
 		child_pid = fork();
 		if (child_pid == -1)
 		{
