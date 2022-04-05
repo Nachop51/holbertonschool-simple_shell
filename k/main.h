@@ -26,5 +26,9 @@ typedef struct list_s
 int _strlen(const char *s);
 list_t *add_node_end(list_t **head, const char *str);
 list_t tokenize(char *str);
+char *_strncpy(char *dest, char *src, int n);
+int _strcmp(const char *s1, char *s2);
+char *_strdup(const char *str);
+char *_getenv(const char *name);
 
 #endif
