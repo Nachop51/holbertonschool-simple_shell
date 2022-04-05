@@ -1,12 +1,6 @@
 #include "main.h"
 
-/**
- * main - Executes a simple command
- * @ac: Argument Counter
- * @av: Argument Vector
- * Return: 1 If succeed, 0 on Error.
- */
-int main(int ac, char **av)
+int main(void)
 {
 	size_t i = 0, c = 0;
 	char *buffer = NULL, **argv, *dup;
@@ -18,7 +12,7 @@ int main(int ac, char **av)
 	{
 		printf("$ ");
 		c = getline(&buffer, &i, stdin);
-		if (c == 1 || c == -1)
+		if (_checkChars(buffer) == -1)
 			continue;
 		buffer[c - 1] = '\0';
 		dup = strdup(buffer);
@@ -27,17 +21,18 @@ int main(int ac, char **av)
 		argv = malloc(sizeof(char *) * 10);
 		argv[0] = malloc(sizeof(char) * head->len);
 		argv[0] = head->str;
+		_checkExit(argv[0]);
 		child_pid = fork();
 		if (child_pid == -1)
 		{
-			perror("Error:");
+			perror("./hsh: 1");
 			return (1);
 		}
 		if (child_pid == 0)
 		{
 			if (execve(argv[0], argv, NULL) == -1)
 			{
-				perror("Error:");
+				perror("./hsh: 1");
 				return (1);
 			}
 		}
@@ -46,4 +41,36 @@ int main(int ac, char **av)
 			wait(&status);
 		}
 	}
+}
+
+int _checkChars(char *str)
+{
+	int i = 0, r = -1;
+
+	while (str[i])
+	{
+		if ((str[i] >= 65 && str[i] <= 90) 
+		|| (str[i] >= 97 && str[i] <= 122)
+		|| str[i] == '/' || str[i] == '.')
+		{
+			r = 0;
+			break;
+		}
+		i++;
+	}
+	return (r);
+}
+
+void _checkExit(char *str)
+{
+	char *Exit = "exit";
+
+	if (strcmp(str, Exit) == 0)
+		exit(0);
+}
+
+void handle_signal(int signal)
+{
+	if (signal == SIGINT)
+		exit(0);
 }

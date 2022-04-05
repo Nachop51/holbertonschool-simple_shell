@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 
 /**
  * struct list_s - lista
@@ -31,5 +32,7 @@ int _strcmp(const char *s1, char *s2);
 char *_strdup(const char *str);
 char *_getenv(const char *name);
 int _checkChars(char *str);
+void handle_signal(int signal);
+void _checkExit(char *str);
 
 #endif
