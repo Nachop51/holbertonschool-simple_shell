@@ -28,9 +28,10 @@ char *_strdup(const char *str);
 int _checkChars(char *str);
 void sig_handler(int signo);
 int args(char *str);
-void free_list(list_t *head);
+void free_array(char **array);
+void free_and_exit(char *str);
 int _checkExit(char *str);
 list_t *add_node_end(list_t **head, const char *str);
-list_t tokenize(char *str);
+char **tokenize(char *str);
 
 #endif

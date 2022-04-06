@@ -6,50 +6,23 @@
  *
  * Return: list_t
  */
-list_t tokenize(char *str)
+char **tokenize(char *str)
 {
-	char *token;
-	list_t *head;
+	char *token, **array;
+	int size = 0, n = 0;
 
-	head = NULL;
+	size = args(str);
+	array = malloc(sizeof(char *) * (size + 1));
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		add_node_end(&head, token);
+		array[n] = malloc(sizeof(token));
+		array[n] = strcpy(array[n], token);
 		token = strtok(NULL, " ");
+		n++;
 	}
-	return (*head);
-}
-
-/**
- * add_node_end - adds an element at the end of a list
- * @head: address
- * @str: string
- *
- * Return: the address of the new element
- */
-list_t *add_node_end(list_t **head, const char *str)
-{
-	list_t *new, *last;
-
-	new = malloc(sizeof(list_t));
-	if (new == NULL)
-		return (NULL);
-	new->str = _strdup(str);
-	new->next = NULL;
-	if (*head == NULL)
-	{
-		*head = new;
-		return (new);
-	}
-	last = *head;
-	while (last->next != NULL)
-	{
-		last = last->next;
-	}
-	last->next = new;
-
-	return (new);
+	array[n] = NULL;
+	return (array);
 }
 
 /**
