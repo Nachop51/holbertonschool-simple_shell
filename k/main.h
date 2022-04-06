@@ -26,13 +26,15 @@ typedef struct list_s
 
 /* MAIN FUNCTIONS */
 
-list_t tokenize(char *str);
+char **tokenize(char *str);
 char *_getenv(const char *name);
 int _checkChars(char *str);
 int _checkExit(char *str);
 char *_status(char *PATH, char *filename);
 int args(char *str);
 void sig_handler(int signo);
+void free_array(char **array);
+void free_and_exit(char *buffer);
 
 /* STRINGS */
 
@@ -46,9 +48,5 @@ char *str_concat(char *s1, char *s2);
 
 list_t *add_node_end(list_t **head, const char *str);
 /* size_t print_list(const list_t *h); */
-
-#include "tokenize.c"
-#include "lists.c"
-#include "strings.c"
 
 #endif

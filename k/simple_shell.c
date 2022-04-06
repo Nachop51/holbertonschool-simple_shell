@@ -2,26 +2,25 @@
 
 int main(void)
 {
-	size_t i = 0, c = 0;
+	size_t i = 0;
+	int c = 0;
 	char *buffer = NULL, **argv, *dup;
 	int status;
 	pid_t child_pid;
-	list_t *head;
 
 	while (1)
 	{
 		printf("$ ");
-		signal(SIGINT, sig_handler);
+		if (signal(SIGINT, sig_handler) == SIG_ERR)
+			continue;
 		c = getline(&buffer, &i, stdin);
+		if (c == -1)
+			free_and_exit(buffer);
 		if (_checkChars(buffer) == -1)
 			continue;
 		buffer[c - 1] = '\0';
 		dup = strdup(buffer);
-		head = malloc(sizeof(list_t));
-		*head = tokenize(dup);
-		_checkExit(head->str);
-		argv = malloc(sizeof(char *) * args(buffer));
-		argv[0] = head->str;
+		argv = tokenize(dup);
 		if (_checkExit(argv[0]) == 1)
 			break;
 		child_pid = fork();
@@ -41,14 +40,14 @@ int main(void)
 		else
 		{
 			wait(&status);
-			free(argv[0]);
+			free(dup);
+			free_array(argv);
 			free(argv);
 		}
 	}
 	free(dup);
 	free(buffer);
-	free(head);
-	free(argv[0]);
+	free_array(argv);
 	free(argv);
 	return (0);
 }
@@ -83,7 +82,7 @@ int _checkExit(char *str)
 void sig_handler(int signo)
 {
 	if (signo == SIGINT)
-		printf("\n$ ");
+		return;
 }
 
 int args(char *str)
@@ -99,4 +98,22 @@ int args(char *str)
 		i++;
 	}
 	return (counter);
+}
+
+void free_and_exit(char *buffer)
+{
+	free(buffer);
+	exit(0);
+}
+
+void free_array(char **array)
+{
+	int i = 0;
+
+	while(array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array[i]);
 }
