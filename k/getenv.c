@@ -24,7 +24,7 @@ char *_getenv(const char *name)
 			value = malloc(sizeof(char) * strlen(token) + 1);
 			if (!value)
 				return (NULL);
-			strcpy(value, token);
+			_strcpy(value, token);
 			free(cpy);
 			break;
 		}

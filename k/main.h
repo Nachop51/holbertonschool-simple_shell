@@ -38,7 +38,7 @@ void free_and_exit(char *buffer);
 
 /* STRINGS */
 
-char *_strncpy(char *dest, char *src, int n);
+char *_strcpy(char *dest, char *src);
 int _strcmp(const char *s1, char *s2);
 char *_strdup(const char *str);
 int _strlen(const char *s);
