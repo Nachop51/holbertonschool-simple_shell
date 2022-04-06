@@ -33,6 +33,7 @@ char *_status(char *PATH, char *filename);
 
 char *_getenv(const char *name);
 int _checkChars(char *str);
+char *path(char *name);
 void sig_handler(int signo);
 int args(char *str);
 void free_array(char **array);

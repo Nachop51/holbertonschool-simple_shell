@@ -18,7 +18,18 @@ char **tokenize(char *str)
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		array[n] = malloc(sizeof(token));
+		if (n == 0)
+			if (token[0] != '/')
+			{
+				array[n] = malloc(sizeof(path(token) + 1));
+				if (!array[n])
+					return (NULL);
+				array[n] = path(token);
+				n++;
+				token = strtok(NULL, " ");
+				continue;
+			}
+		array[n] = malloc(sizeof(token) + 1);
 		if (!array[n])
 			return (NULL);
 		array[n] = strcpy(array[n], token);

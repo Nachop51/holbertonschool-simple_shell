@@ -1,17 +1,12 @@
 #include "main.h"
-#include <sys/types.h>
-#include <sys/stat.h>
 
-int main(int ac, char **av, char **ep)
+char *path(char *name)
 {
-	char *PATH = _getenv("PATH"), *r;
+	char *PATH = _getenv("PATH"), *r = _status(PATH, name);
 
-	if (ac != 2)
-		return (1);
-	r = _status(PATH, av[1]);
-	if(r != NULL)
-		printf("%s\n", r);
-	return (0);
+	if (r == NULL)
+		return (NULL);
+	return (r);
 }
 
 char *_status(char *PATH, char *filename)
@@ -119,32 +114,4 @@ int _strcmp(const char *s1, const char *s2)
 	}
 	result = ss1 - ss2;
 	return (result);
-}
-
-/**
- * _strdup - strdup C function
- * @str: string to duplicate
- *
- * Return: str
- */
-char *_strdup(const char *str)
-{
-	int i, n = 0;
-	char *strcopy;
-
-	if (str == NULL)
-		return (NULL);
-	do {
-		n++;
-	} while (str[n - 1]);
-	strcopy = malloc(sizeof(char) * n);
-	if (strcopy == NULL)
-		return (NULL);
-
-	for (i = 0; i < n; i++)
-	{
-		strcopy[i] = str[i];
-	}
-
-	return (strcopy);
 }
