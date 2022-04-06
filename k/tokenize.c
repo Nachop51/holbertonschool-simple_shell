@@ -4,20 +4,28 @@
  * tokenize - tokenize
  * @str: str
  *
- * Return: list_t
+ * Return: array
  */
 
-list_t tokenize(char *str)
+char **tokenize(char *str)
 {
-	char *token;
-	list_t *head;
+	char *token, **array;
+	int size = 0, n = 0;
 
-	head = NULL;
+	size = args(str);
+	array = malloc(sizeof(char *) * (size + 1));
+	if (array == NULL)
+		return (NULL);
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		add_node_end(&head, token);
+		array[n] = malloc(sizeof(token));
+		if (array[n] == NULL)
+			return (NULL);
+		array[n] = strcpy(array[n], token);
 		token = strtok(NULL, " ");
+		n++;
 	}
-	return (*head);
+	array[n] = NULL;
+	return (array);
 }
