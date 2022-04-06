@@ -19,10 +19,7 @@ char **tokenize(char *str)
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		array[n] = malloc(sizeof(token));
-		if (array[n] == NULL)
-			return (NULL);
-		array[n] = strcpy(array[n], token);
+		array[n] = _strdup(token);
 		token = strtok(NULL, " ");
 		n++;
 	}

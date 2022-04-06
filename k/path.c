@@ -1,34 +1,26 @@
 #include "main.h"
 
 /**
- * print_path -  prints each directory contained in PATH
- * @ac: ac
- * @av: av
- * @ep: ep
+ * path - searches a route of a file
+ * @name: name of the file
  *
- * Return: 0
+ * Return: Absolute route of a file or NULL
  */
-
-int print_path(int ac, char **av, char **ep)
+char *path(char *name)
 {
-	char *PATH = getenv("PATH"), *r;
+	char *PATH = getenv("PATH"), *r = _status(PATH, name);
 
-	if (ac != 2)
-		return (1);
-	r = _status(PATH, av[1]);
-	if (r != NULL)
-		printf("%s\n", r);
-	return (0);
+	if (r == NULL)
+		return (NULL);
+	return (r);
 }
-
 /**
- * _status - status
- * @PATH: PATH
- * @filename: filename
+ * _status - checks if a file exists
+ * @PATH: Enviroment variable PATH
+ * @filename: name of the file
  *
- * Return: return
+ * Return: Absolute route of a file or NULL
  */
-
 char *_status(char *PATH, char *filename)
 {
 	char *cpy = strdup(PATH);

@@ -57,24 +57,24 @@ int _strlen(const char *s)
  */
 char *_strdup(const char *str)
 {
-	int a = 0, b;
-	char *s;
+	int i, n = 0;
+	char *strcopy;
 
 	if (str == NULL)
 		return (NULL);
-
-	while (str[a])
-		a++;
-
-	s = malloc(a * sizeof(char) + 1);
-
-	if (s == NULL)
+	do {
+		n++;
+	} while (str[n - 1]);
+	strcopy = malloc(sizeof(char) * n);
+	if (strcopy == NULL)
 		return (NULL);
 
-	for (b = 0; b < a; b++)
-		s[b] = str[b];
+	for (i = 0; i < n; i++)
+	{
+		strcopy[i] = str[i];
+	}
 
-	return (s);
+	return (strcopy);
 }
 /**
 * _strcmp - compares two strings
@@ -97,39 +97,21 @@ int _strcmp(const char *s1, char *s2)
 	return (0);
 }
 /**
-* *_strncpy - copies a string
-* @dest: first string
-* @src: second string
-* @n: number
-*
-* Return: dest
-*/
-char *_strncpy(char *dest, char *src, int n)
+ * *_strcpy - copies string pointed to by src to buffer pointed to by dest
+ * @dest: pointer to string
+ * @src: pointer to buffer
+ *
+ * Return: Pointer to dest
+ */
+char *_strcpy(char *dest, char *src)
 {
-	int a, b = 0;
+	int i = 0;
 
-	while (src[b] != '\0')
+	while (src[i] != '\0')
 	{
-		b++;
+		dest[i] = src[i];
+		i++;
 	}
-	if (b >= n)
-	{
-		for (a = 0; a < n; a++)
-		{
-			dest[a] = src[a];
-		}
-	}
-	else
-	{
-		for (a = 0; a < b; a++)
-		{
-			dest[a] = src[a];
-		}
-		while (b < n)
-		{
-			dest[b] = '\0';
-			b++;
-		}
-	}
+	dest[i] = '\0';
 	return (dest);
 }
