@@ -18,7 +18,9 @@ char **tokenize(char *str)
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
+		
 		array[n] = _strdup(token);
+		printf("array[%d]:%s\n", n, array[n]);
 		token = strtok(NULL, " ");
 		n++;
 	}

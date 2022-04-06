@@ -18,7 +18,7 @@ int main(void)
 		if (_checkChars(buffer) == -1)
 			continue;
 		buffer[c - 1] = '\0';
-		dup = strdup(buffer);
+		dup = _strdup(buffer);
 		argv = tokenize(dup);
 		if (_checkExit(argv[0]) == 1)
 			break;
@@ -33,7 +33,7 @@ int main(void)
 			if (execve(argv[0], argv, NULL) == -1)
 			{
 				perror("./hsh: 1");
-				return (1);
+				break;
 			}
 		}
 		else
