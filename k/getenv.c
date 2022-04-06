@@ -1,32 +1,36 @@
 #include "main.h"
-#include <unistd.h>
 
-extern char **environ;
-
-int main(void)
-{
-	char *PATH = _getenv("PATH");
-	printf("%s\n", PATH);
-	free(PATH);
-}
+/**
+ * _getenv - gets an enviroment variable
+ * @name: the name of the variable
+ *
+ * Return: the enviroment
+ */
 
 char *_getenv(const char *name)
 {
-	char *token1, *token2, *cpy;
+	extern char **environ;
+	char *token, *value, *cpy;
 	size_t i = 0;
 
 	if (!name)
-		return(NULL);
+		return (NULL);
 	while (environ[i] != NULL)
 	{
 		cpy = _strdup(environ[i]);
-		token1 = strtok(cpy, "=");
-		token2 = _strdup(strtok(NULL, "="));
-		if (_strcmp(name, token1) == 0)
+		token = strtok(cpy, "=");
+		if (_strcmp(name, token) == 0)
+		{
+			token = strtok(NULL, "=");
+			value = malloc(sizeof(char) * strlen(token) + 1);
+			if (!value)
+				return (NULL);
+			strcpy(value, token);
+			free(cpy);
 			break;
-		free(cpy);
-		free(token2);
+		}
 		i++;
+		free(cpy);
 	}
-	return (token2);
+	return (value);
 }

@@ -6,6 +6,7 @@
  *
  * Return: list_t
  */
+
 list_t tokenize(char *str)
 {
 	char *token;

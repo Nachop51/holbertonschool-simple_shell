@@ -8,6 +8,8 @@ int main(void)
 	pid_t child_pid;
 	list_t *head;
 
+	buffer = getenv("PATH");
+
 	while (1)
 	{
 		printf("$ ");
@@ -49,7 +51,7 @@ int _checkChars(char *str)
 
 	while (str[i])
 	{
-		if ((str[i] >= 65 && str[i] <= 90) 
+		if ((str[i] >= 65 && str[i] <= 90)
 		|| (str[i] >= 97 && str[i] <= 122)
 		|| str[i] == '/' || str[i] == '.')
 		{
