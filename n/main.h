@@ -30,9 +30,11 @@ char *_strdup(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *str_concat(char *s1, char *s2);
 char *_status(char *PATH, char *filename);
+char *_strcpy(char *dest, char *src);
 
 char *_getenv(const char *name);
 int _checkChars(char *str);
+char *path(char *name);
 void sig_handler(int signo);
 int args(char *str);
 void free_array(char **array);

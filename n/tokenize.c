@@ -18,10 +18,7 @@ char **tokenize(char *str)
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
-		array[n] = malloc(sizeof(token));
-		if (!array[n])
-			return (NULL);
-		array[n] = strcpy(array[n], token);
+		array[n] = _strdup(token);
 		token = strtok(NULL, " ");
 		n++;
 	}
@@ -70,4 +67,24 @@ char *_strdup(const char *str)
 	}
 
 	return (strcopy);
+}
+
+/**
+ * _strcpy - copy a string
+ * @dest: dest
+ * @src: source
+ *
+ * Return: a char
+ */
+char *_strcpy(char *dest, char *src)
+{
+	int i;
+
+	for (i = 0; src[i]; i++)
+	{
+		dest[i] = src[i];
+	}
+	dest[i] = '\0';
+
+	return (dest);
 }

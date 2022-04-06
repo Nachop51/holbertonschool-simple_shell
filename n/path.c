@@ -1,19 +1,27 @@
 #include "main.h"
-#include <sys/types.h>
-#include <sys/stat.h>
 
-int main(int ac, char **av, char **ep)
+/**
+ * path - searches a route of a file
+ * @name: name of the file
+ *
+ * Return: Absolute route of a file or NULL
+ */
+char *path(char *name)
 {
-	char *PATH = _getenv("PATH"), *r;
+	char *PATH = _getenv("PATH"), *r = _status(PATH, name);
 
-	if (ac != 2)
-		return (1);
-	r = _status(PATH, av[1]);
-	if(r != NULL)
-		printf("%s\n", r);
-	return (0);
+	if (r == NULL)
+		return (NULL);
+	return (r);
 }
 
+/**
+ * _status - checks if a file exists
+ * @PATH: Environment variable PATH
+ * @filename: name of the file
+ *
+ * Return: Absolute route of a file or NULL
+ */
 char *_status(char *PATH, char *filename)
 {
 	char *cpy = strdup(PATH);
@@ -65,6 +73,12 @@ char *str_concat(char *s1, char *s2)
 	return (str);
 }
 
+/**
+ * _getenv - uses the environ variable in order to get a variable
+ * @name: name of the variable
+ *
+ * Return: value of the variable or NULL
+ */
 char *_getenv(const char *name)
 {
 	char *token, *value, *cpy;
@@ -119,32 +133,4 @@ int _strcmp(const char *s1, const char *s2)
 	}
 	result = ss1 - ss2;
 	return (result);
-}
-
-/**
- * _strdup - strdup C function
- * @str: string to duplicate
- *
- * Return: str
- */
-char *_strdup(const char *str)
-{
-	int i, n = 0;
-	char *strcopy;
-
-	if (str == NULL)
-		return (NULL);
-	do {
-		n++;
-	} while (str[n - 1]);
-	strcopy = malloc(sizeof(char) * n);
-	if (strcopy == NULL)
-		return (NULL);
-
-	for (i = 0; i < n; i++)
-	{
-		strcopy[i] = str[i];
-	}
-
-	return (strcopy);
 }

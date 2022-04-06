@@ -71,17 +71,14 @@ int _checkChars(char *str)
 
 int _checkExit(char *str)
 {
-	char *Exit = "exit";
-
-	if (strcmp(str, Exit) == 0)
+	if (strcmp(str, "exit") == 0)
 		return (1);
 	return (0);
 }
 
-void sig_handler(int signo)
+void sig_handler(__attribute__((unused))int signo)
 {
-	if (signo == SIGINT)
-		printf("\n$ ");
+	write(STDOUT_FILENO, "\n$ ", 3);
 }
 
 int args(char *str)
@@ -101,6 +98,7 @@ int args(char *str)
 
 void free_and_exit(char *buffer)
 {
+	write(STDOUT_FILENO, "\n", 1);
 	free(buffer);
 	exit(0);
 }
