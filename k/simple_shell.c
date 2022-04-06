@@ -8,11 +8,10 @@ int main(void)
 	pid_t child_pid;
 	list_t *head;
 
-	buffer = getenv("PATH");
-
 	while (1)
 	{
 		printf("$ ");
+		signal(SIGINT, sig_handler);
 		c = getline(&buffer, &i, stdin);
 		if (_checkChars(buffer) == -1)
 			continue;
@@ -20,10 +19,11 @@ int main(void)
 		dup = strdup(buffer);
 		head = malloc(sizeof(list_t));
 		*head = tokenize(dup);
-		argv = malloc(sizeof(char *) * 10);
-		argv[0] = malloc(sizeof(char) * head->len);
+		_checkExit(head->str);
+		argv = malloc(sizeof(char *) * args(buffer));
 		argv[0] = head->str;
-		_checkExit(argv[0]);
+		if (_checkExit(argv[0]) == 1)
+			break;
 		child_pid = fork();
 		if (child_pid == -1)
 		{
@@ -41,8 +41,16 @@ int main(void)
 		else
 		{
 			wait(&status);
+			free(argv[0]);
+			free(argv);
 		}
 	}
+	free(dup);
+	free(buffer);
+	free(head);
+	free(argv[0]);
+	free(argv);
+	return (0);
 }
 
 int _checkChars(char *str)
@@ -63,16 +71,32 @@ int _checkChars(char *str)
 	return (r);
 }
 
-void _checkExit(char *str)
+int _checkExit(char *str)
 {
 	char *Exit = "exit";
 
 	if (strcmp(str, Exit) == 0)
-		exit(0);
+		return (1);
+	return (0);
 }
 
-void handle_signal(int signal)
+void sig_handler(int signo)
 {
-	if (signal == SIGINT)
-		exit(0);
+	if (signo == SIGINT)
+		printf("\n$ ");
+}
+
+int args(char *str)
+{
+	int i = 1, counter = 0;
+
+	if (str[0] != ' ')
+		counter++;
+	while (str[i])
+	{
+		if (str[i] == ' ' && (str[i + 1] != ' ' && str[i + 1] != '\0'))
+			counter++;
+		i++;
+	}
+	return (counter);
 }
