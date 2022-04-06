@@ -78,10 +78,9 @@ int _checkExit(char *str)
 	return (0);
 }
 
-void sig_handler(int signo)
+void sig_handler(__attribute__((unused))int signo)
 {
-	if (signo == SIGINT)
-		printf("\n$ ");
+	write(STDOUT_FILENO, "\n$ ", 3);
 }
 
 int args(char *str)
@@ -101,6 +100,7 @@ int args(char *str)
 
 void free_and_exit(char *buffer)
 {
+	write(STDOUT_FILENO, "\n", 1);
 	free(buffer);
 	exit(0);
 }
