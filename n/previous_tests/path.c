@@ -9,9 +9,7 @@ int main(int ac, char **av, char **ep)
 {
 	char *PATH = getenv("PATH"), *r;
 
-	if (ac != 2)
-		return (1);
-	r = _status(PATH, av[1]);
+	r = _status(PATH, "PATH");
 	if(r != NULL)
 		printf("%s\n", r);
 	return (0);

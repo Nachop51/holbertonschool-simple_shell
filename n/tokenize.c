@@ -8,15 +8,19 @@
  */
 char **tokenize(char *str)
 {
-	char *token, **array;
+	char *token = NULL, **array = NULL;
 	int size = 0, n = 0;
 
 	size = args(str);
 	array = malloc(sizeof(char *) * (size + 1));
+	if (!array)
+		return (NULL);
 	token = strtok(str, " ");
 	while (token != NULL)
 	{
 		array[n] = malloc(sizeof(token));
+		if (!array[n])
+			return (NULL);
 		array[n] = strcpy(array[n], token);
 		token = strtok(NULL, " ");
 		n++;
