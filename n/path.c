@@ -24,7 +24,7 @@ char *path(char *name)
  */
 char *_status(char *PATH, char *filename)
 {
-	char *cpy = strdup(PATH);
+	char *cpy = _strdup(PATH);
 	char *token, *absolute;
 	struct stat st;
 
@@ -93,7 +93,7 @@ char *_getenv(const char *name)
 		if (_strcmp(name, token) == 0)
 		{
 			token = strtok(NULL, "=");
-			value = malloc(sizeof(char) * strlen(token) + 1);
+			value = malloc(sizeof(char) * _strlen(token) + 1);
 			if (!value)
 				return (NULL);
 			strcpy(value, token);
