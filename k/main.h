@@ -9,14 +9,16 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/stat.h>
-
 #include "strings.c"
+#include "lists.c"
+
+extern char **environ;
 
 /**
- * struct list_s - lista
- * @str: str
- * @len: len
- * @next: next
+ * struct list_s - singly linked list
+ * @str: string
+ * @len: length of the string
+ * @next: pointer to the next node
  */
 
 typedef struct list_s

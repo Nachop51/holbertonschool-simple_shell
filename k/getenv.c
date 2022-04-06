@@ -9,7 +9,6 @@
 
 char *_getenv(const char *name)
 {
-	extern char **environ;
 	char *token, *value, *cpy;
 	size_t i = 0;
 
