@@ -20,6 +20,7 @@ int main(void)
 		dup = strdup(buffer);
 		head = malloc(sizeof(list_t));
 		*head = tokenize(dup);
+		_checkExit(head->str);
 		argv = malloc(sizeof(char *) * args(buffer));
 		argv[0] = head->str;
 		if (_checkExit(argv[0]) == 1)
