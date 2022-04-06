@@ -1,13 +1,16 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h>
+
+extern char **environ;
 
 /**
  * struct list_s - lista
@@ -24,7 +27,11 @@ typedef struct list_s
 /* String Functions */
 int _strlen(const char *s);
 char *_strdup(const char *str);
+int _strcmp(const char *s1, const char *s2);
+char *str_concat(char *s1, char *s2);
+char *_status(char *PATH, char *filename);
 
+char *_getenv(const char *name);
 int _checkChars(char *str);
 void sig_handler(int signo);
 int args(char *str);

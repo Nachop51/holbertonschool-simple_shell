@@ -4,15 +4,14 @@ int main(void)
 {
 	size_t i = 0;
 	int c = 0;
-	char *buffer = NULL, **argv, *dup;
-	int status;
+	char *buffer = NULL, **argv = NULL, *dup = NULL;
+	int status = 0;
 	pid_t child_pid;
 
+	signal(SIGINT, sig_handler);
 	while (1)
 	{
 		printf("$ ");
-		if (signal(SIGINT, sig_handler) == SIG_ERR)
-			continue;
 		c = getline(&buffer, &i, stdin);
 		if (c == -1)
 			free_and_exit(buffer);
@@ -42,6 +41,7 @@ int main(void)
 			wait(&status);
 			free(dup);
 			free_array(argv);
+			free(argv);
 		}
 	}
 	free(dup);
@@ -81,7 +81,7 @@ int _checkExit(char *str)
 void sig_handler(int signo)
 {
 	if (signo == SIGINT)
-		return;
+		printf("\n$ ");
 }
 
 int args(char *str)
