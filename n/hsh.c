@@ -71,9 +71,7 @@ int _checkChars(char *str)
 
 int _checkExit(char *str)
 {
-	char *Exit = "exit";
-
-	if (strcmp(str, Exit) == 0)
+	if (strcmp(str, "exit") == 0)
 		return (1);
 	return (0);
 }
