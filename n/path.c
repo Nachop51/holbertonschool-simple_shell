@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * path - searches a route of a file
+ * @name: name of the file
+ *
+ * Return: Absolute route of a file or NULL
+ */
 char *path(char *name)
 {
 	char *PATH = _getenv("PATH"), *r = _status(PATH, name);
@@ -9,6 +15,13 @@ char *path(char *name)
 	return (r);
 }
 
+/**
+ * _status - checks if a file exists
+ * @PATH: Environment variable PATH
+ * @filename: name of the file
+ *
+ * Return: Absolute route of a file or NULL
+ */
 char *_status(char *PATH, char *filename)
 {
 	char *cpy = strdup(PATH);
@@ -60,6 +73,12 @@ char *str_concat(char *s1, char *s2)
 	return (str);
 }
 
+/**
+ * _getenv - uses the environ variable in order to get a variable
+ * @name: name of the variable
+ *
+ * Return: value of the variable or NULL
+ */
 char *_getenv(const char *name)
 {
 	char *token, *value, *cpy;
