@@ -67,3 +67,7 @@ char *str_concat(char *s1, char *s2)
 		str[n + i - 1] = s2[n];
 	return (str);
 }
+
+
+	// if (signal(SIGINT, sig_handler) == SIG_ERR || signal(SIGKILL, sig_handler) == SIG_ERR)
+	// 		exit(0);
