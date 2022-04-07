@@ -37,7 +37,6 @@ int main(void)
 				break;
 			}
 		}
-
 		else
 		{
 			wait(&status);
