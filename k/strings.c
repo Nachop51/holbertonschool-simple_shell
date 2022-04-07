@@ -40,14 +40,11 @@ char *str_concat(char *s1, char *s2)
  */
 int _strlen(const char *s)
 {
-	int a = 0;
+	int i = 0;
 
-	while (*s != '\0')
-	{
-		a++;
-		s++;
-	}
-	return (a);
+	while (s[i])
+		i++;
+	return (i);
 }
 /**
  * _strdup - returns a pointer to a newly allocated space in memory
@@ -83,18 +80,26 @@ char *_strdup(const char *str)
 *
 * Return: negative if s1 is less, 0 if match, positive if greater
 */
-int _strcmp(const char *s1, char *s2)
+int _strcmp(const char *s1, const char *s2)
 {
-	int a;
+	int i, ss1 = 0, ss2 = 0, result = 0;
 
-	for (a = 0; s1[a] != '\0' || s2[a] != '\0'; a++)
+	for (i = 0; i > -1; i++)
 	{
-		if (s1[a] != s2[a])
+		if (s1[i] != s2[i])
 		{
-			return (s1[a] - s2[a]);
+			ss1 = s1[i];
+			ss2 = s2[i];
+			break;
+		}
+		else
+		{
+			if (s1[i] == '\0' || s2[i] == '\0')
+				break;
 		}
 	}
-	return (0);
+	result = ss1 - ss2;
+	return (result);
 }
 /**
  * *_strcpy - copies string pointed to by src to buffer pointed to by dest
@@ -105,13 +110,13 @@ int _strcmp(const char *s1, char *s2)
  */
 char *_strcpy(char *dest, char *src)
 {
-	int i = 0;
+	int i;
 
-	while (src[i] != '\0')
+	for (i = 0; src[i]; i++)
 	{
 		dest[i] = src[i];
-		i++;
 	}
 	dest[i] = '\0';
+
 	return (dest);
 }

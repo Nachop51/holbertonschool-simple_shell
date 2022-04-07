@@ -1,19 +1,18 @@
 #include "main.h"
 
 /**
- * _getenv - gets an enviroment variable
- * @name: the name of the variable
+ * _getenv - uses the environ variable in order to get a variable
+ * @name: name of the variable
  *
- * Return: the enviroment
+ * Return: value of the variable or NULL
  */
-
 char *_getenv(const char *name)
 {
 	char *token, *value, *cpy;
 	size_t i = 0;
 
 	if (!name)
-		return (NULL);
+		exit(1);
 	while (environ[i] != NULL)
 	{
 		cpy = _strdup(environ[i]);
@@ -21,10 +20,10 @@ char *_getenv(const char *name)
 		if (_strcmp(name, token) == 0)
 		{
 			token = strtok(NULL, "=");
-			value = malloc(sizeof(char) * strlen(token) + 1);
+			value = malloc(sizeof(char) * _strlen(token) + 1);
 			if (!value)
 				return (NULL);
-			_strcpy(value, token);
+			strcpy(value, token);
 			free(cpy);
 			break;
 		}

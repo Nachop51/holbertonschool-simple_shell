@@ -1,15 +1,20 @@
 #include "main.h"
 
 /**
- * _checkExit - checks the exit condition
+ * _checkBuiltIn - checks the built-ins
  * @str: string
  *
- * Return: 1 if successful 0 if not
+ * Return: return
  */
-int _checkExit(char *str)
+int _checkBuiltIn(char *str)
 {
 	if (strcmp(str, "exit") == 0)
 		return (1);
+	if (strcmp(str, "env") == 0)
+	{
+		printenv();
+		return (2);
+	}
 	return (0);
 }
 /**
@@ -24,9 +29,7 @@ int _checkChars(char *str)
 
 	while (str[i])
 	{
-		if ((str[i] >= 65 && str[i] <= 90)
-		|| (str[i] >= 97 && str[i] <= 122)
-		|| str[i] == '/' || str[i] == '.')
+		if (str[i] != 32 && str[i] != 10)
 		{
 			r = 0;
 			break;
