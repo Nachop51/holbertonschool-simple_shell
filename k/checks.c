@@ -2,7 +2,7 @@
 
 /**
  * _checkBuiltIn - checks the built-ins
- * @str: string
+ * @str: the string
  *
  * Return: return
  */
@@ -18,10 +18,10 @@ int _checkBuiltIn(char *str)
 	return (0);
 }
 /**
- * _checkChars - checks for special characters
+ * _checkExit - checks for the exit built-in
  * @str: the string
  *
- * Return: 0 if there are no SC, -1 if there is
+ * Return: 1 if it is the exit built-in, 0 if not
  */
 int checkExit(char *str)
 {
@@ -32,9 +32,15 @@ int checkExit(char *str)
 		free(cpy);
 		return (1);
 	}
-	free (cpy);
+	free(cpy);
 	return (0);
 }
+/**
+ * checkEnv - checks for the env built-in
+ * @str: the string
+ *
+ * Return: 1 if it is the env built-in, 0 if not
+ */
 int checkEnv(char *str)
 {
 	char *cpy = _strdup(str);
@@ -44,9 +50,15 @@ int checkEnv(char *str)
 		free(cpy);
 		return (1);
 	}
-	free (cpy);
+	free(cpy);
 	return (0);
 }
+/**
+ * _checkChars - checks the characters
+ * @str: the string
+ *
+ * Return: -1 or 0
+ */
 int _checkChars(char *str)
 {
 	int i = 0, r = -1;
@@ -56,7 +68,7 @@ int _checkChars(char *str)
 		if (str[i] != 32 && str[i] != 10)
 		{
 			r = 0;
-			if(str[0] == ' ' && str[1] != ' ')
+			if (str[0] == ' ' && str[1] != ' ')
 			{
 				str = strtok(str, " ");
 			}

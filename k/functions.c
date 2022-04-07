@@ -21,7 +21,7 @@ int args(char *str)
 	int i = 1, counter = 0;
 
 	if (str[0] != ' ')
-			counter++;
+		counter++;
 	if (str[0] == ' ' && (str[1] != ' ' && str[1] != '\0'))
 		counter++;
 	while (str[i])

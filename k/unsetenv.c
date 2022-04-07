@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * _unsetenv - deletes the variable name from the environment 
+ * _unsetenv - deletes the variable name from the environment
  * @name: the name of the variable
  *
  * Return: 0 on success or -1 on error

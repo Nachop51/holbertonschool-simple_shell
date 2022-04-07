@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * printenv - prints the enviroment
+ *
+ * Return: void
+ */
+
 void printenv(void)
 {
 	int i = 0;

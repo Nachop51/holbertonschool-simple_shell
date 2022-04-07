@@ -3,6 +3,7 @@
 /**
  * tokenize - tokenizer
  * @str: str
+ * @builtIn: built-in
  *
  * Return: list_t
  */
