@@ -32,6 +32,10 @@ int _checkChars(char *str)
 		if (str[i] != 32 && str[i] != 10)
 		{
 			r = 0;
+			if(str[0] == ' ' && str[1] != ' ')
+			{
+				str = strtok(str, " ");
+			}
 			break;
 		}
 		i++;

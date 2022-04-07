@@ -8,11 +8,18 @@
  *
  * Return: 0 on success or -1 on error
  */
+int main(void)
+{
+	printenv();
+	_setenv("XD", "hola", 1);
+	printenv();
+	return (0);
+}
 int _setenv(char *name, char *value, int overwrite)
 {
-	char *var;
+	char *var = NULL;
 	size_t len;
-	int i;
+	int i = 0;
 
 	len = strlen(name);
 	while (environ[i] != NULL)
@@ -22,7 +29,6 @@ int _setenv(char *name, char *value, int overwrite)
 			var = create_variable(name, value);
 			if (!var)
 				return (-1);
-			free(environ[i]);
 			environ[i] = strdup(var);
 			free(var);
 			return (0);
@@ -32,9 +38,8 @@ int _setenv(char *name, char *value, int overwrite)
 	var = create_variable(name, value);
 	if (!var)
 		return (-1);
-	free(environ[i]);
 	environ[i] = strdup(var);
-	environ[i++] = NULL;
+	environ[i + 1] = NULL;
 	free(var);
 	return (0);
 }

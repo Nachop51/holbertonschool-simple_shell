@@ -30,3 +30,16 @@ void free_array(char **array)
 	free(array[i]);
 	free(array);
 }
+void free_array_dup(char **array, char *dup)
+{
+	int i = 0;
+
+	while(array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array[i]);
+	free(array);
+	free(dup);
+}

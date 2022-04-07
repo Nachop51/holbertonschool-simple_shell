@@ -3,9 +3,8 @@
 int main(void)
 {
 	size_t i = 0;
-	int counter = 0, builtIn = 0;
+	int counter = 0, builtIn = 0, status = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
-	int status = 0;
 	pid_t child_pid;
 
 	signal(SIGINT, sig_handler);
@@ -37,18 +36,17 @@ int main(void)
 				break;
 			}
 		}
+
 		else
 		{
 			wait(&status);
-			free(dup);
-			free_array(argv);
+			if((isatty(STDIN_FILENO) == 0))
+				break;
+			free_array_dup(argv, dup);
 		}
 	}
 	if (builtIn != 1)
-	{
-		free_array(argv);
-		free(dup);
-	}
+		free_array_dup(argv, dup);
 	free(buffer);
 	return (0);
 }
