@@ -31,7 +31,7 @@ int main(void)
 		}
 		if (child_pid == 0)
 		{
-			if (execve(argv[0], argv, NULL) == -1)
+			if (execve(argv[0], argv, environ) == -1)
 			{
 				perror(argv[0]);
 				break;
@@ -73,6 +73,8 @@ int _checkChars(char *str)
 
 int _checkBuiltIn(char *str)
 {
+	if (checkDir(str) == 1)
+		return (3);
 	if (checkExit(str) == 1)
 		return (1);
 	if (checkEnv(str) == 1)
@@ -81,6 +83,24 @@ int _checkBuiltIn(char *str)
 		return (2);
 	}
 	return (0);
+}
+
+int checkDir(char *str)
+{
+	char *cpy = _strdup(str), *dir = NULL;
+	int flag = 0;
+
+	if (strcmp(strtok(cpy, " "), "cd") == 0)
+	{
+		dir = strtok(NULL, " ");
+		if (dir == NULL)
+			dir = _getenv("HOME");
+		chdir(dir);
+		free(dir);
+		flag++;
+	}
+	free(cpy);
+	return (flag);
 }
 
 int checkExit(char *str)

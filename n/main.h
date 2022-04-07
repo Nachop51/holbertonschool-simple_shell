@@ -36,6 +36,7 @@ void printenv(void);
 int _checkChars(char *str);
 char *path(char *filename);
 void sig_handler(int signo);
+int checkDir(char *str);
 int args(char *str);
 int checkExit(char *str);
 int checkEnv(char *str);
