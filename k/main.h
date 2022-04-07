@@ -36,7 +36,6 @@ void sig_handler(int signo);
 void free_array(char **array);
 void free_and_exit(char *buffer);
 int _setenv(const char *name, const char *value, int overwrite);
-int _unsetenv(const char *name);
 
 /* STRINGS */
 
