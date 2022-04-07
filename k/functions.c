@@ -8,7 +8,7 @@
  */
 void sig_handler(__attribute__((unused))int signo)
 {
-	write(STDOUT_FILENO, "\n$ ", 3);
+	write(STDOUT_FILENO, "\n", 1);
 }
 /**
  * args - counts how many arguments are
@@ -21,6 +21,8 @@ int args(char *str)
 	int i = 1, counter = 0;
 
 	if (str[0] != ' ')
+			counter++;
+	if (str[0] == ' ' && (str[1] != ' ' && str[1] != '\0'))
 		counter++;
 	while (str[i])
 	{
@@ -28,5 +30,6 @@ int args(char *str)
 			counter++;
 		i++;
 	}
+	printf("%d\n", counter);
 	return (counter);
 }
