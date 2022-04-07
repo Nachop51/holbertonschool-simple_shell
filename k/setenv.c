@@ -8,7 +8,7 @@
  *
  * Return: 0 on success or -1 on error
  */
-int _setenv(const char *name, const char *value, int overwrite)
+int _setenv(char *name, char *value, int overwrite)
 {
 	char *var;
 	size_t len;

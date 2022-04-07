@@ -35,8 +35,8 @@ int args(char *str);
 void sig_handler(int signo);
 void free_array(char **array);
 void free_and_exit(char *buffer);
-int _setenv(const char *name, const char *value, int overwrite);
-
+int _setenv(char *name, char *value, int overwrite);
+char *create_variable(char *name, char *value);
 /* STRINGS */
 
 char *_strcpy(char *dest, char *src);
