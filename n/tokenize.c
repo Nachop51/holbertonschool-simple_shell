@@ -22,10 +22,7 @@ char **tokenize(char *str)
 		token = strtok(NULL, " ");
 		n++;
 	}
-	if (path(array[0]) != NULL)
-	{
-		array[0] = path(array[0]);
-	}
+	
 	array[n] = NULL;
 	return (array);
 }
