@@ -1,13 +1,12 @@
 #include "main.h"
 
 /**
- * _status - checks if a file exists
- * @PATH: Environment variable PATH
+ * path - cecks if a file exists
  * @filename: name of the file
  *
  * Return: Absolute route of a file or NULL
  */
-char *_status(char *filename)
+char *path(char *filename)
 {
 	char *PATH = _getenv("PATH");
 	char *cpy = _strdup(PATH), *concatenated;

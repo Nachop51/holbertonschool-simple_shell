@@ -30,7 +30,7 @@ char **tokenize(char *str, int builtIn);
 char *_getenv(const char *name);
 int _checkChars(char *str);
 int _checkBuiltIn(char *str);
-char *_status(char *filename);
+char *path(char *filename);
 int args(char *str);
 void sig_handler(int signo);
 void free_array(char **array);

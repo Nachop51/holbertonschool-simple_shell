@@ -25,7 +25,7 @@ char **tokenize(char *str, int builtIn)
 	printf("%d\n", builtIn);
 	if (builtIn == 0 && array[0][0] != '/')
 	{
-		test = _status(array[0]);
+		test = path(array[0]);
 		if (test != NULL)
 		{
 			free(array[0]);
