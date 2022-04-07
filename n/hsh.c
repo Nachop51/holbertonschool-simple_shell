@@ -18,7 +18,7 @@ int main(void)
 		if (_checkChars(buffer) == -1)
 			continue;
 		buffer[counter - 1] = '\0';
-		builtIn = _checkBuiltIn(buffer );
+		builtIn = _checkBuiltIn(buffer);
 		if (builtIn == 1)
 			break;
 		dup = _strdup(buffer);
