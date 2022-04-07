@@ -37,7 +37,6 @@ int main(void)
 				break;
 			}
 		}
-
 		else
 		{
 			wait(&status);
@@ -74,9 +73,9 @@ int _checkChars(char *str)
 
 int _checkBuiltIn(char *str)
 {
-	if (strcmp(str, "exit") == 0)
+	if (strcmp(strtok(str, " "), "exit") == 0)
 		return (1);
-	if (strcmp(str, "env") == 0)
+	if (strcmp(strtok(str, " "), "env") == 0)
 	{
 		printenv();
 		return (2);
