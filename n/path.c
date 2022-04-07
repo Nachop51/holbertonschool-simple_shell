@@ -10,19 +10,26 @@
 char *_status(char *filename)
 {
 	char *PATH = _getenv("PATH");
-	char *cpy = _strdup(PATH);
+	char *cpy = _strdup(PATH), *concatenated;
 	char *token, *absolute;
 	struct stat st;
 
 	token = strtok(cpy, ":");
-	filename = str_concat("/", filename);
+	concatenated = str_concat("/", filename);
 	while (token != NULL)
 	{
-		absolute = str_concat(token, filename);
+		absolute = str_concat(token, concatenated);
 		if (stat(absolute, &st) == 0)
+		{
+			free(PATH);
+			free(cpy);
+			free(concatenated);
 			return (absolute);
+		}
 		token = strtok(NULL, ":");
 	}
+	free(PATH);
+	free(concatenated);
 	free(cpy);
 	return (NULL);
 }

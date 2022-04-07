@@ -41,5 +41,5 @@ void free_array(char **array);
 void free_and_exit(char *str);
 int _checkBuiltIn(char *str);
 list_t *add_node_end(list_t **head, const char *str);
-char **tokenize(char *str);
+char **tokenize(char *str, int builtIn);
 #endif
