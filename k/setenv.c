@@ -1,5 +1,13 @@
 #include "main.h"
 
+/**
+ * _setenv - changes or adds an environment variable
+ * @name: the name of the variable
+ * @value: the value of the variable
+ * @overwrite: if the variable most be overwrited or not
+ *
+ * Return: 0 on success or -1 on error
+ */
 int _setenv(const char *name, const char *value, int overwrite)
 {
 	char *var;
@@ -12,6 +20,8 @@ int _setenv(const char *name, const char *value, int overwrite)
 		if ((strncmp(environ[i], name, len) == 0) && overwrite != 0)
 		{
 			var = create_variable(name, value);
+			if (!var)
+				return (-1);
 			free(environ[i]);
 			environ[i] = strdup(var);
 			free(var);
@@ -20,12 +30,21 @@ int _setenv(const char *name, const char *value, int overwrite)
 		i++;
 	}
 	var = create_variable(name, value);
+	if (!var)
+		return (-1);
 	free(environ[i]);
 	environ[i] = strdup(var);
 	environ[i++] = NULL;
 	free(var);
 	return (0);
 }
+/**
+ * create_variable - creates a variable
+ * @name: the name of the variable
+ * @value: the value of the variable
+ *
+ * Return: the new variable
+ */
 char *create_variable(char *name, char *value)
 {
 	char *var;
