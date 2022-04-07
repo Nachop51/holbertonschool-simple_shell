@@ -59,9 +59,7 @@ int _checkChars(char *str)
 
 	while (str[i])
 	{
-		if ((str[i] >= 65 && str[i] <= 90) 
-		|| (str[i] >= 97 && str[i] <= 122)
-		|| str[i] == '/' || str[i] == '.')
+		if (str[i] != 32 && str[i] != 10)
 		{
 			r = 0;
 			break;

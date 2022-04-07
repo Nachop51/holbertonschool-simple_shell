@@ -26,6 +26,7 @@ char *path(char *filename)
 			return (absolute);
 		}
 		token = strtok(NULL, ":");
+		free(absolute);
 	}
 	free(PATH);
 	free(concatenated);
