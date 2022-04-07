@@ -41,6 +41,8 @@ int _unsetenv(char *name);
 char *create_variable(char *name, char *value);
 void printenv(void);
 void free_array_dup(char **array, char *dup);
+int checkEnv(char *str);
+int checkExit(char *str);
 
 /* STRINGS */
 

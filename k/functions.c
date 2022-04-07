@@ -8,7 +8,7 @@
  */
 void sig_handler(__attribute__((unused))int signo)
 {
-	write(STDOUT_FILENO, "\n", 1);
+	write(STDOUT_FILENO, "\n$ ", 3);
 }
 /**
  * args - counts how many arguments are

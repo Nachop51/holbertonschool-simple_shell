@@ -10,7 +10,8 @@ int main(void)
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		printf("$ ");
+		if((isatty(STDIN_FILENO) == 1))
+			printf("$ ");
 		counter = getline(&buffer, &i, stdin);
 		if (counter == -1)
 			free_and_exit(buffer);
@@ -25,18 +26,17 @@ int main(void)
 		child_pid = fork();
 		if (child_pid == -1)
 		{
-			perror("./hsh: 1");
+			perror(argv[0]);
 			return (1);
 		}
 		if (child_pid == 0)
 		{
-			if (execve(argv[0], argv, NULL) == -1)
+			if (execve(argv[0], argv, environ) == -1)
 			{
-				perror("./hsh: 1");
+				perror(argv[0]);
 				break;
 			}
 		}
-
 		else
 		{
 			wait(&status);

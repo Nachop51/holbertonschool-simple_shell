@@ -8,13 +8,7 @@
  *
  * Return: 0 on success or -1 on error
  */
-int main(void)
-{
-	printenv();
-	_setenv("XD", "hola", 1);
-	printenv();
-	return (0);
-}
+
 int _setenv(char *name, char *value, int overwrite)
 {
 	char *var = NULL;
