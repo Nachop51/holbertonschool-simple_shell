@@ -3,7 +3,7 @@
 int main(void)
 {
 	size_t i = 0;
-	int c = 0;
+	int counter = 0, builtIn = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
 	int status = 0;
 	pid_t child_pid;
@@ -12,16 +12,17 @@ int main(void)
 	while (1)
 	{
 		printf("$ ");
-		c = getline(&buffer, &i, stdin);
-		if (c == -1)
+		counter = getline(&buffer, &i, stdin);
+		if (counter == -1)
 			free_and_exit(buffer);
 		if (_checkChars(buffer) == -1)
 			continue;
-		buffer[c - 1] = '\0';
+		buffer[counter - 1] = '\0';
+		builtIn = _checkBuiltIn(buffer);
+		if (builtIn == 1)
+			break;
 		dup = _strdup(buffer);
 		argv = tokenize(dup);
-		if (_checkExit(argv[0]) == 1)
-			break;
 		child_pid = fork();
 		if (child_pid == -1)
 		{
@@ -41,13 +42,14 @@ int main(void)
 			wait(&status);
 			free(dup);
 			free_array(argv);
-			free(argv);
 		}
 	}
-	free(dup);
+	if (builtIn != 1)
+	{
+		free_array(argv);
+		free(dup);
+	}
 	free(buffer);
-	free_array(argv);
-	free(argv);
 	return (0);
 }
 
@@ -69,16 +71,21 @@ int _checkChars(char *str)
 	return (r);
 }
 
-int _checkExit(char *str)
+int _checkBuiltIn(char *str)
 {
 	if (strcmp(str, "exit") == 0)
 		return (1);
+	if (strcmp(str, "env") == 0)
+	{
+		printenv();
+		return (2);
+	}
 	return (0);
 }
 
 void sig_handler(__attribute__((unused))int signo)
 {
-	write(STDOUT_FILENO, "\n$ ", 3);
+	dprintf(STDOUT_FILENO, "\n$ ");
 }
 
 int args(char *str)
@@ -98,7 +105,7 @@ int args(char *str)
 
 void free_and_exit(char *buffer)
 {
-	write(STDOUT_FILENO, "\n", 1);
+	dprintf(STDOUT_FILENO, "\n");
 	free(buffer);
 	exit(0);
 }
@@ -113,4 +120,15 @@ void free_array(char **array)
 		i++;
 	}
 	free(array[i]);
+	free(array);
+}
+
+void printenv(void)
+{
+	int i = 0;
+
+	while (environ[i])
+	{
+		printf("%s\n", environ[i++]);
+	}
 }
