@@ -3,15 +3,15 @@
 int main(void)
 {
 	size_t i = 0;
-	int counter = 0, builtIn = 0;
+	int counter = 0, builtIn = 0, status = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
-	int status = 0;
 	pid_t child_pid;
 
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		printf("$ ");
+		if((isatty(STDIN_FILENO) == 1))
+			printf("$ ");
 		counter = getline(&buffer, &i, stdin);
 		if (counter == -1)
 			free_and_exit(buffer);
@@ -37,18 +37,17 @@ int main(void)
 				break;
 			}
 		}
+
 		else
 		{
 			wait(&status);
-			free(dup);
-			free_array(argv);
+			if((isatty(STDIN_FILENO) == 0))
+				break;
+			free_array_dup(argv, dup);
 		}
 	}
 	if (builtIn != 1)
-	{
-		free_array(argv);
-		free(dup);
-	}
+		free_array_dup(argv, dup);
 	free(buffer);
 	return (0);
 }
@@ -62,6 +61,10 @@ int _checkChars(char *str)
 		if (str[i] != 32 && str[i] != 10)
 		{
 			r = 0;
+			if(str[0] == ' ' && str[1] != ' ')
+			{
+				str = strtok(str, " ");
+			}
 			break;
 		}
 		i++;
@@ -90,14 +93,17 @@ int args(char *str)
 {
 	int i = 1, counter = 0;
 
-	if(str[0] != ' ')
+	if (str[0] != ' ')
 			counter++;
+	if (str[0] == ' ' && (str[1] != ' ' && str[1] != '\0'))
+		counter++;
 	while (str[i])
 	{
 		if (str[i] == ' ' && (str[i + 1] != ' ' && str[i + 1] != '\0'))
 			counter++;
 		i++;
 	}
+	printf("%d\n", counter);
 	return (counter);
 }
 
@@ -108,7 +114,7 @@ void free_and_exit(char *buffer)
 	exit(0);
 }
 
-void free_array(char **array)
+void free_array_dup(char **array, char *dup)
 {
 	int i = 0;
 
@@ -119,6 +125,7 @@ void free_array(char **array)
 	}
 	free(array[i]);
 	free(array);
+	free(dup);
 }
 
 void printenv(void)
