@@ -37,6 +37,8 @@ int _checkChars(char *str);
 char *path(char *filename);
 void sig_handler(int signo);
 int args(char *str);
+int checkExit(char *str);
+int checkEnv(char *str);
 void free_array_dup(char **array, char *dup);
 void free_and_exit(char *str);
 int _checkBuiltIn(char *str);

@@ -26,14 +26,14 @@ int main(void)
 		child_pid = fork();
 		if (child_pid == -1)
 		{
-			perror("./hsh: 1");
+			perror(argv[0]);
 			return (1);
 		}
 		if (child_pid == 0)
 		{
 			if (execve(argv[0], argv, NULL) == -1)
 			{
-				perror("./hsh: 1");
+				perror(argv[0]);
 				break;
 			}
 		}
@@ -73,13 +73,39 @@ int _checkChars(char *str)
 
 int _checkBuiltIn(char *str)
 {
-	if (strcmp(strtok(str, " "), "exit") == 0)
+	if (checkExit(str) == 1)
 		return (1);
-	if (strcmp(strtok(str, " "), "env") == 0)
+	if (checkEnv(str) == 1)
 	{
 		printenv();
 		return (2);
 	}
+	return (0);
+}
+
+int checkExit(char *str)
+{
+	char *cpy = _strdup(str);
+
+	if (strcmp(strtok(cpy, " "), "exit") == 0)
+	{
+		free(cpy);
+		return (1);
+	}
+	free (cpy);
+	return (0);
+}
+
+int checkEnv(char *str)
+{
+	char *cpy = _strdup(str);
+
+	if (strcmp(strtok(cpy, " "), "env") == 0)
+	{
+		free(cpy);
+		return (1);
+	}
+	free (cpy);
 	return (0);
 }
 
@@ -102,7 +128,6 @@ int args(char *str)
 			counter++;
 		i++;
 	}
-	printf("%d\n", counter);
 	return (counter);
 }
 
