@@ -1,17 +1,16 @@
 #include "main.h"
 
 /**
- * _status - checks if a file exists
- * @PATH: Environment variable PATH
+ * path - Checks if a file exists
  * @filename: name of the file
  *
- * Return: Absolute route of a file or NULL
+ * Return: Returns the absolute route of a file or NULL
  */
-char *_status(char *filename)
+char *path(char *filename)
 {
 	char *PATH = _getenv("PATH");
-	char *cpy = _strdup(PATH), *concatenated;
-	char *token, *absolute;
+	char *cpy = _strdup(PATH), *concatenated = NULL;
+	char *token = NULL, *absolute = NULL;
 	struct stat st;
 
 	token = strtok(cpy, ":");
@@ -35,15 +34,15 @@ char *_status(char *filename)
 }
 
 /**
- * str_concat - concatenates two strings
- * @s1: first string
- * @s2: second string
+ * str_concat - Concatenates two strings
+ * @s1: First string
+ * @s2: Second string
  *
- * Return: concatenated string
+ * Return: Returns the concatenated string
  */
 char *str_concat(char *s1, char *s2)
 {
-	int i = 0, j = 0, n;
+	int i = 0, j = 0, n = 0;
 	char *str;
 
 	if (s1 == NULL)
@@ -68,10 +67,10 @@ char *str_concat(char *s1, char *s2)
 }
 
 /**
- * _getenv - uses the environ variable in order to get a variable
+ * _getenv - Uses the environ variable in order to get a variable
  * @name: name of the variable
  *
- * Return: value of the variable or NULL
+ * Return: Returns the value of the variable or NULL
  */
 char *_getenv(const char *name)
 {
@@ -89,7 +88,10 @@ char *_getenv(const char *name)
 			token = strtok(NULL, "=");
 			value = malloc(sizeof(char) * _strlen(token) + 1);
 			if (!value)
+			{
+				free(cpy);
 				return (NULL);
+			}
 			strcpy(value, token);
 			free(cpy);
 			break;
@@ -101,11 +103,11 @@ char *_getenv(const char *name)
 }
 
 /**
- * _strcmp - strcmp function
- * @s1: string 1
- * @s2: string 2
+ * _strcmp - Strcmp function
+ * @s1: String 1
+ * @s2: String 2
  *
- * Return: the different values
+ * Return: Returns the difference of the strings
  */
 int _strcmp(const char *s1, const char *s2)
 {

@@ -1,10 +1,11 @@
 #include "main.h"
 
 /**
- * tokenize - tokenizer
- * @str: str
+ * tokenize - Tokenizes a given string
+ * @str: String to tokenize
+ * @builtIn: Indicates if there's a built-in or not
  *
- * Return: list_t
+ * Return: An array of tokenized strings
  */
 char **tokenize(char *str, int builtIn)
 {
@@ -22,10 +23,9 @@ char **tokenize(char *str, int builtIn)
 		token = strtok(NULL, " ");
 		n++;
 	}
-	printf("%d\n", builtIn);
 	if (builtIn == 0 && array[0][0] != '/')
 	{
-		test = _status(array[0]);
+		test = path(array[0]);
 		if (test != NULL)
 		{
 			free(array[0]);
@@ -38,10 +38,10 @@ char **tokenize(char *str, int builtIn)
 }
 
 /**
- * _strlen - string length
- * @s: string
+ * _strlen - Calculates the length of a string
+ * @s: String
  *
- * Return: the length of a string
+ * Return: Returns the length of a string
  */
 int _strlen(const char *s)
 {
@@ -54,9 +54,9 @@ int _strlen(const char *s)
 
 /**
  * _strdup - strdup C function
- * @str: string to duplicate
+ * @str: String to duplicate
  *
- * Return: str
+ * Return: A new copy of the given string
  */
 char *_strdup(const char *str)
 {
@@ -81,11 +81,11 @@ char *_strdup(const char *str)
 }
 
 /**
- * _strcpy - copy a string
- * @dest: dest
- * @src: source
+ * _strcpy - Takes a source string and copies it to the dest string
+ * @dest: Dest string
+ * @src: Source string
  *
- * Return: a char
+ * Return: Returns a copy of the source string
  */
 char *_strcpy(char *dest, char *src)
 {
