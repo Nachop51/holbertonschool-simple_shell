@@ -127,6 +127,58 @@ char *clearBuffer(char *str, int counter)
 {
 	str[counter - 1] = '\0';
 	str = searchAndDestroy(str);
+	str = searchAndReplace(str);
+	return (str);
+}
+
+/**
+ * searchAndReplace - Looks for a ~ and replaces it for the variable $HOME
+ * ~/../home/shell/simple_shell/n/a.out
+ * @str: String to traverse
+ * Return: The modified string or just the string
+ */
+char *searchAndReplace(char *str)
+{
+	int i = 0, tilde = 0, j = 0, flag = 0;
+	char *cpy = _strdup(str), *home = NULL, *concatenated = NULL, *new = NULL;
+
+	while (str[i])
+	{
+		if (str[i] == '~')
+			tilde++;
+		i++;
+	}
+	i = 0;
+	if (tilde > 0)
+	{
+		home = _getenv("HOME");
+		free(str);
+		while (cpy[j])
+		{
+			while (cpy[i])
+			{
+				if (cpy[i] == '~')
+				{
+					flag++;
+					break;
+				}
+				else
+					cpy[i] = str[i];
+				i++;
+			}
+			if (flag == 1)
+			{
+				new = malloc(sizeof(i) + 1);
+				strncpy(new, str, i);
+				new[i + 1] = '\0';
+				concatenated = str_concat(new, home);
+			}
+			j++;
+		}
+		free(home);
+	}
+	free(cpy);
+	printf("str:%s\n", concatenated);
 	return (str);
 }
 
@@ -321,4 +373,41 @@ void printenv(void)
 	{
 		printf("%s\n", environ[i++]);
 	}
+}
+
+/**
+ * string_nconcat - concatenates two strings in n bytes
+ * @s1: String 1
+ * @s2: String 2
+ * @n: number of bytes
+ *
+ * Return: string concatenated
+ */
+char *string_nconcat(char *s1, char *s2, unsigned int n)
+{
+	unsigned int i = 0, j = 0, x = 0, a = 0;
+	char *str;
+
+	if (s1 == NULL)
+		s1 = "";
+	if (s2 == NULL)
+		s2 = "";
+	while (s1[i])
+		i++;
+	while (s2[j])
+		j++;
+	if (n >= j)
+	{
+		n = j;
+	}
+	str = malloc(sizeof(char) * (i + n + 1));
+	if (str == NULL)
+		return (NULL);
+
+	for (x = 0; x < i; x++)
+		str[x] = s1[x];
+	for (; x < (n + i); x++, a++)
+		str[x] = s2[a];
+	str[x] = '\0';
+	return (str);
 }

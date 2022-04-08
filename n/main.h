@@ -42,6 +42,7 @@ void sig_handler(int signo);
 int checkDir(char *str);
 int args(char *str);
 int checkExit(char *str);
+char *searchAndReplace(char *str);
 char *clearBuffer(char *str, int counter);
 int getLineAndCheck(char *str);
 char *searchAndDestroy(char *str);
