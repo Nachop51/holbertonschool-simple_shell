@@ -95,8 +95,11 @@ int checkDir(char *str)
 		dir = strtok(NULL, " ");
 		if (dir == NULL)
 			dir = _getenv("HOME");
-		chdir(dir);
-		free(dir);
+		if (chdir(dir) == 1)
+		{
+			perror("cd");
+			free(dir);
+		}
 		flag++;
 	}
 	free(cpy);

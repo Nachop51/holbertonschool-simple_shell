@@ -1,30 +1,50 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h>
+
+extern char **environ;
 
 /**
  * struct list_s - lista
  * @str: str
- * @len: len
  * @next: next
  */
 
 typedef struct list_s
 {
 	char *str;
-	unsigned int len;
 	struct list_s *next;
 } list_t;
 
-// size_t print_list(const list_t *h);
+/* String Functions */
 int _strlen(const char *s);
-list_t *add_node_end(list_t **head, const char *str);
-list_t tokenize(char *str);
+char *_strdup(const char *str);
+int _strcmp(const char *s1, const char *s2);
+char *str_concat(char *s1, char *s2);
+char *_strcpy(char *dest, char *src);
 
+char *_getenv(const char *name);
+void printenv(void);
+int _checkChars(char *str);
+char *path(char *filename);
+void sig_handler(int signo);
+int _setenv(char *name, char *value, int overwrite);
+char *create_variable(char *name, char *value);
+int checkDir(char *str);
+int args(char *str);
+int checkExit(char *str);
+int checkEnv(char *str);
+void free_array_dup(char **array, char *dup);
+void free_and_exit(char *str);
+int _checkBuiltIn(char *str);
+list_t *add_node_end(list_t **head, const char *str);
+char **tokenize(char *str, int builtIn);
 #endif
