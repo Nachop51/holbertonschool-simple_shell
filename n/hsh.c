@@ -1,5 +1,10 @@
 #include "main.h"
 
+/**
+ * main - Recreation of a "sh"
+ * 
+ * Return: 0 If succeed, or the number of the error
+ */
 int main(void)
 {
 	size_t i = 0;
@@ -8,54 +13,65 @@ int main(void)
 	pid_t child_pid;
 	struct stat st;
 
-	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		if ((isatty(STDIN_FILENO) == 1))
-			printf("$ ");
+		_isatty();
 		counter = getline(&buffer, &i, stdin);
 		if (counter == -1)
 			free_and_exit(buffer);
 		if (_checkChars(buffer) == -1)
 			continue;
-		buffer[counter - 1] = '\0';
-		buffer = searchAndDestroy(buffer);
+		buffer = clearBuffer(buffer, counter);
 		builtIn = _checkBuiltIn(buffer);
 		if (builtIn == 1)
 			break;
 		dup = _strdup(buffer);
 		argv = tokenize(dup, builtIn);
 		if ((builtIn == 0 && (stat(argv[0], &st) == 0)))
-		{
-			child_pid = fork();
-			if (child_pid == -1)
-			{
-				perror(argv[0]);
-				return (1);
-			}
-		}
+			child_pid = child_fork(child_pid, argv[0]);
 		else
 			child_pid = 1;
-		if (child_pid == 0)
+		if (child_pid == 0 && execve(argv[0], argv, environ) == -1)
 		{
-			if (execve(argv[0], argv, environ) == -1)
-			{
-				perror(argv[0]);
-				break;
-			}
+			perror(argv[0]);
+			break;
 		}
 		else
-		{
-			wait(&status);
-			if ((isatty(STDIN_FILENO) == 0))
+			if (waitIsatty(status, argv, dup) == 0)
 				break;
-			free_array_dup(argv, dup);
-		}
 	}
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
 	free(buffer);
 	return (0);
+}
+
+int waitIsatty(int status, char **argv, char *dup)
+{
+	int i = 0;
+
+	wait(&status);
+	i = isatty(STDIN_FILENO);
+	free_array_dup(argv, dup);
+	return (i);
+}
+
+int child_fork(pid_t child_pid, char *name)
+{
+	child_pid = fork();
+	if (child_pid == -1)
+	{
+		perror(name);
+		exit(EXIT_FAILURE);
+	}
+	return (child_pid);
+}
+
+void _isatty(void)
+{
+	signal(SIGINT, sig_handler);
+	if ((isatty(STDIN_FILENO) == 1))
+		printf("$ ");
 }
 
 int _checkChars(char *str)
@@ -76,6 +92,13 @@ int _checkChars(char *str)
 		i++;
 	}
 	return (r);
+}
+
+char *clearBuffer(char *str, int counter)
+{
+	str[counter - 1] = '\0';
+	str = searchAndDestroy(str);
+	return (str);
 }
 
 char *searchAndDestroy(char *str)
@@ -149,7 +172,7 @@ int checkExit(char *str)
 		free(cpy);
 		return (1);
 	}
-	free (cpy);
+	free(cpy);
 	return (0);
 }
 
@@ -162,7 +185,7 @@ int checkEnv(char *str)
 		free(cpy);
 		return (1);
 	}
-	free (cpy);
+	free(cpy);
 	return (0);
 }
 
@@ -176,7 +199,7 @@ int args(char *str)
 	int i = 1, counter = 0;
 
 	if (str[0] != ' ')
-			counter++;
+		counter++;
 	if (str[0] == ' ' && (str[1] != ' ' && str[1] != '\0'))
 		counter++;
 	while (str[i])
