@@ -82,7 +82,6 @@ char *_strdup(const char *str)
 	{
 		strcopy[i] = str[i];
 	}
-
 	return (strcopy);
 }
 

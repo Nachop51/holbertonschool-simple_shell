@@ -11,7 +11,7 @@ int main(void)
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		if((isatty(STDIN_FILENO) == 1))
+		if ((isatty(STDIN_FILENO) == 1))
 			printf("$ ");
 		counter = getline(&buffer, &i, stdin);
 		if (counter == -1)
@@ -19,6 +19,7 @@ int main(void)
 		if (_checkChars(buffer) == -1)
 			continue;
 		buffer[counter - 1] = '\0';
+		buffer = searchAndDestroy(buffer);
 		builtIn = _checkBuiltIn(buffer);
 		if (builtIn == 1)
 			break;
@@ -46,11 +47,10 @@ int main(void)
 		else
 		{
 			wait(&status);
-			if((isatty(STDIN_FILENO) == 0))
+			if ((isatty(STDIN_FILENO) == 0))
 				break;
 			free_array_dup(argv, dup);
 		}
-		
 	}
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
@@ -64,10 +64,10 @@ int _checkChars(char *str)
 
 	while (str[i])
 	{
-		if (str[i] != 32 && str[i] != 10)
+		if (str[i] != 32 && str[i] != 10 && str[i] != '\t')
 		{
 			r = 0;
-			if(str[0] == ' ' && str[1] != ' ')
+			if (str[0] == ' ' && str[1] != ' ')
 			{
 				str = strtok(str, " ");
 			}
@@ -76,6 +76,33 @@ int _checkChars(char *str)
 		i++;
 	}
 	return (r);
+}
+
+char *searchAndDestroy(char *str)
+{
+	int i = 0, tab = 0;
+
+	while (str[i])
+	{
+		if (str[i] == '\t')
+		{
+			tab++;
+		}
+		i++;
+	}
+	i = 0;
+	if (tab > 0)
+	{
+		while (str[i])
+		{
+			if (str[i] == '\t')
+			{
+				str[i] = ' ';
+			}
+			i++;
+		}
+	}
+	return (str);
 }
 
 int _checkBuiltIn(char *str)
@@ -172,7 +199,7 @@ void free_array_dup(char **array, char *dup)
 {
 	int i = 0;
 
-	while(array[i] != NULL)
+	while (array[i] != NULL)
 	{
 		free(array[i]);
 		i++;
