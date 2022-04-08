@@ -33,3 +33,29 @@ int args(char *str)
 	printf("%d\n", counter);
 	return (counter);
 }
+char *searchAndDestroy(char *str)
+{
+	int i = 0, tab = 0;
+
+	while (str[i])
+	{
+		if (str[i] == '\t')
+		{
+			tab++;
+		}
+		i++;
+	}
+	i = 0;
+	if (tab > 0)
+	{
+		while (str[i])
+		{
+			if (str[i] == '\t')
+			{
+				str[i] = ' ';
+			}
+			i++;
+		}
+	}
+	return (str);
+}

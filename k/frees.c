@@ -52,7 +52,8 @@ void free_array_dup(char **array, char *dup)
 }
 /**
  * free_environ - frees all the environ[i] used in the function _setenv
- * 
+ * @var_name: the name of the variable
+ *
  * Return: asd
  */
 void free_environ(char *var_name)
@@ -63,7 +64,7 @@ void free_environ(char *var_name)
 	len = strlen(var_name);
 	while (environ[i] != NULL)
 	{
-		if(strncmp(environ[i], var_name, len) == 0)
+		if (strncmp(environ[i], var_name, len) == 0)
 		{
 			free(environ[i]);
 		}

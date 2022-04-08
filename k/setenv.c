@@ -1,12 +1,5 @@
 #include "main.h"
 
-int main(void)
-{
-	_setenv("LANGUAGE", "puto", 1);
-	printenv();
-	free_environ("LANGUAGE");
-	return (0);
-}
 /**
  * _setenv - changes or adds an environment variable
  * @name: the name of the variable

@@ -8,6 +8,8 @@
  */
 int _checkBuiltIn(char *str)
 {
+	if (checkDir(str) == 1)
+		return (3);
 	if (checkExit(str) == 1)
 		return (1);
 	if (checkEnv(str) == 1)
@@ -18,7 +20,7 @@ int _checkBuiltIn(char *str)
 	return (0);
 }
 /**
- * _checkExit - checks for the exit built-in
+ * checkExit - checks for the exit built-in
  * @str: the string
  *
  * Return: 1 if it is the exit built-in, 0 if not
@@ -78,6 +80,12 @@ int _checkChars(char *str)
 	}
 	return (r);
 }
+/**
+ * checkDir - check directory
+ * @str: the string
+ *
+ * Return: the flag
+ */
 int checkDir(char *str)
 {
 	char *cpy = _strdup(str), *dir = NULL;
