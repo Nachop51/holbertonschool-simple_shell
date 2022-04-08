@@ -33,7 +33,7 @@ int _strcmp(const char *s1, const char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
 
-void _isatty(void);
+void _isattyAndSignal(void);
 char *_getenv(const char *name);
 void printenv(void);
 int _checkChars(char *str);
