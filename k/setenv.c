@@ -1,5 +1,12 @@
 #include "main.h"
 
+int main(void)
+{
+	_setenv("LANGUAGE", "puto", 1);
+	printenv();
+	free_environ("LANGUAGE");
+	return (0);
+}
 /**
  * _setenv - changes or adds an environment variable
  * @name: the name of the variable
@@ -8,10 +15,8 @@
  *
  * Return: 0 on success or -1 on error
  */
-
 int _setenv(char *name, char *value, int overwrite)
 {
-	char *var = NULL;
 	size_t len;
 	int i = 0;
 
@@ -20,21 +25,17 @@ int _setenv(char *name, char *value, int overwrite)
 	{
 		if ((strncmp(environ[i], name, len) == 0) && overwrite != 0)
 		{
-			var = create_variable(name, value);
-			if (!var)
+			environ[i] = create_variable(name, value);
+			if (!environ[i])
 				return (-1);
-			environ[i] = strdup(var);
-			free(var);
 			return (0);
 		}
 		i++;
 	}
-	var = create_variable(name, value);
-	if (!var)
+	environ[i] = create_variable(name, value);
+	if (!environ[i])
 		return (-1);
-	environ[i] = strdup(var);
 	environ[i + 1] = NULL;
-	free(var);
 	return (0);
 }
 /**
@@ -46,16 +47,11 @@ int _setenv(char *name, char *value, int overwrite)
  */
 char *create_variable(char *name, char *value)
 {
-	char *var;
-	size_t len;
+	char *var = NULL, *aux = NULL;
+	size_t len = 0;
 
-	len = strlen(name) + strlen(value) + 1;
-	var = malloc(len + 1);
-	if (var == NULL)
-		return (NULL);
-
-	var = str_concat(var, name);
-	var = str_concat(var, "=");
-	var = str_concat(var, value);
+	aux = str_concat(name, "=");
+	var = str_concat(aux, value);
+	free(aux);
 	return (var);
 }

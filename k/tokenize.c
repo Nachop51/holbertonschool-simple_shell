@@ -23,7 +23,6 @@ char **tokenize(char *str, int builtIn)
 		token = strtok(NULL, " ");
 		n++;
 	}
-	printf("%d\n", builtIn);
 	if (builtIn == 0 && array[0][0] != '/')
 	{
 		test = path(array[0]);
@@ -32,6 +31,8 @@ char **tokenize(char *str, int builtIn)
 			free(array[0]);
 			array[0] = _strdup(test);
 		}
+		else
+			perror(array[0]);
 		free(test);
 	}
 	array[n] = NULL;

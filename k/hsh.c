@@ -23,12 +23,17 @@ int main(void)
 			break;
 		dup = _strdup(buffer);
 		argv = tokenize(dup, builtIn);
-		child_pid = fork();
-		if (child_pid == -1)
+		if (builtIn == 0 && argv[0][0] == '/')
 		{
-			perror(argv[0]);
-			return (1);
+			child_pid = fork();
+			if (child_pid == -1)
+			{
+				perror(argv[0]);
+				return (1);
+			}
 		}
+		else
+			child_pid = 1;
 		if (child_pid == 0)
 		{
 			if (execve(argv[0], argv, environ) == -1)

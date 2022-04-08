@@ -26,7 +26,6 @@ typedef struct list_s
 
 /* MAIN FUNCTIONS */
 
-int main(void);
 char **tokenize(char *str, int builtIn);
 char *_getenv(const char *name);
 int _checkChars(char *str);
@@ -43,6 +42,8 @@ void printenv(void);
 void free_array_dup(char **array, char *dup);
 int checkEnv(char *str);
 int checkExit(char *str);
+int checkDir(char *str);
+void free_environ(char *var_name);
 
 /* STRINGS */
 

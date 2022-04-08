@@ -54,24 +54,22 @@ int _strlen(const char *s)
  */
 char *_strdup(const char *str)
 {
-	int i, n = 0;
-	char *strcopy;
+	size_t len, i;
+	char *str2;
 
-	if (str == NULL)
-		return (NULL);
-	do {
-		n++;
-	} while (str[n - 1]);
-	strcopy = malloc(sizeof(char) * n);
-	if (strcopy == NULL)
-		return (NULL);
-
-	for (i = 0; i < n; i++)
+	len = _strlen(str);
+	str2 = malloc(sizeof(char) * (len + 1));
+	if (!str2)
 	{
-		strcopy[i] = str[i];
+		return (NULL);
 	}
 
-	return (strcopy);
+	for (i = 0; i <= len; i++)
+	{
+		str2[i] = str[i];
+	}
+
+	return (str2);
 }
 /**
 * _strcmp - compares two strings

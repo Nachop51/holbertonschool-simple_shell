@@ -6,7 +6,11 @@
  *
  * Return: 0 on success or -1 on error
  */
-
+int main(void)
+{
+	_unsetenv("HOSTNAME");
+	return (0);
+}
 int _unsetenv(char *name)
 {
 	size_t len;

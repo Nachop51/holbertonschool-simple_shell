@@ -78,3 +78,23 @@ int _checkChars(char *str)
 	}
 	return (r);
 }
+int checkDir(char *str)
+{
+	char *cpy = _strdup(str), *dir = NULL;
+	int flag = 0;
+
+	if (strcmp(strtok(cpy, " "), "cd") == 0)
+	{
+		dir = strtok(NULL, " ");
+		if (dir == NULL)
+			dir = _getenv("HOME");
+		if (chdir(dir) == 1)
+		{
+			perror("cd");
+			free(dir);
+		}
+		flag++;
+	}
+	free(cpy);
+	return (flag);
+}
