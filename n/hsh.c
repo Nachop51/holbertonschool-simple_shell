@@ -6,6 +6,7 @@ int main(void)
 	int counter = 0, builtIn = 0, status = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
 	pid_t child_pid;
+	struct stat st;
 
 	signal(SIGINT, sig_handler);
 	while (1)
@@ -23,7 +24,7 @@ int main(void)
 			break;
 		dup = _strdup(buffer);
 		argv = tokenize(dup, builtIn);
-		if (builtIn == 0 && argv[0][0] == '/')
+		if ((builtIn == 0 && (stat(argv[0], &st) == 0)))
 		{
 			child_pid = fork();
 			if (child_pid == -1)

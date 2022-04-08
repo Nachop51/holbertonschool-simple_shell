@@ -3,11 +3,6 @@
 int main(void)
 {
 	int i = 0;
-	printenv();
-	i = _setenv("Hola", "PutoElQueLoLee", 0);
-	printenv();
-	return (0);
-	free(environ[i]);
 }
 
 /**

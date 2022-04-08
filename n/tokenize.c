@@ -11,6 +11,7 @@ char **tokenize(char *str, int builtIn)
 {
 	char *token = NULL, **array = NULL, *test = NULL;
 	int size = 0, n = 0;
+	struct stat st;
 
 	size = args(str);
 	array = malloc(sizeof(char *) * (size + 1));
@@ -32,7 +33,10 @@ char **tokenize(char *str, int builtIn)
 			array[0] = _strdup(test);
 		}
 		else
-			perror(array[0]);
+			if (stat(array[0], &st) == 0)
+				;
+			else
+				perror(array[0]);
 		free(test);
 	}
 	array[n] = NULL;
