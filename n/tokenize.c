@@ -31,6 +31,8 @@ char **tokenize(char *str, int builtIn)
 			free(array[0]);
 			array[0] = _strdup(test);
 		}
+		else
+			perror(array[0]);
 		free(test);
 	}
 	array[n] = NULL;

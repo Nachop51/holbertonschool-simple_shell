@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
+extern int errno;
 extern char **environ;
 
 /**
@@ -43,6 +45,5 @@ int checkEnv(char *str);
 void free_array_dup(char **array, char *dup);
 void free_and_exit(char *str);
 int _checkBuiltIn(char *str);
-list_t *add_node_end(list_t **head, const char *str);
 char **tokenize(char *str, int builtIn);
 #endif
