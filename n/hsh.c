@@ -8,7 +8,7 @@
 int main(void)
 {
 	size_t i = 0;
-	int counter = 0, builtIn = 0, status = 0;
+	int counter = 0, builtIn = 0, status = 0, returnValue = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
 	pid_t child_pid;
 	struct stat st;
@@ -24,7 +24,12 @@ int main(void)
 		buffer = clearBuffer(buffer, counter);
 		builtIn = _checkBuiltIn(buffer);
 		if (builtIn == 1)
-			break;
+		{
+			returnValue = getReturnValue(buffer);
+			if (returnValue >= 0)
+				break;
+			continue;
+		}
 		dup = _strdup(buffer);
 		argv = tokenize(dup, builtIn);
 		if ((builtIn == 0 && (stat(argv[0], &st) == 0)))
@@ -36,32 +41,82 @@ int main(void)
 			perror(argv[0]);
 			break;
 		}
-		else
-			if (waitIsatty(status, argv, dup) == 0)
-				break;
+		if (child_pid != 0)
+			waitAndFree(status, argv, dup);
 	}
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
 	free(buffer);
-	return (0);
+	return (returnValue);
+}
+
+int getReturnValue(char *str)
+{
+	char *cpy = _strdup(str), *token;
+	int returnValue = 0;
+
+	token = strtok(cpy, " ");
+	token = strtok(NULL, " ");
+	if (token == NULL)
+	{
+		free(cpy);
+		return (0);
+	}
+	if (_isdigit(token) == 0)
+		returnValue = _atoi(token);
+	else
+	{
+		free(cpy);
+		write(STDERR_FILENO, "exit: Illegal number\n", 22);
+		return (-1);
+	}
+	free(cpy);
+	if (returnValue < 0)
+	{
+		write(STDERR_FILENO, "exit: Illegal number\n", 22);
+		returnValue = -1;
+	}
+	return (returnValue);
 }
 
 /**
- * waitIsatty - Looks for isatty and frees things
+ * _isdigit - prints out if it is a digit or not
+ * @digit: digit to check
+ *
+ * Return: 1 or 0
+ */
+int _isdigit(char *str)
+{
+	int i = 0, flag = 0;
+
+	while (str[i])
+	{
+		if (str[i] >= 48 && str[i] <= 57)
+		{
+			i++;
+			continue;
+		}
+		else
+		{
+			flag++;
+			break;
+		}
+	}
+	return (flag);
+}
+
+/**
+ * waitAndFree - Waits and frees things
  * @status: Status of the process
  * @argv: Array to free
  * @dup: Duplicated array to free
  *
  * Return: Returns the status of isatty
  */
-int waitIsatty(int status, char **argv, char *dup)
+void waitAndFree(int status, char **argv, char *dup)
 {
-	int i = 0;
-
 	wait(&status);
-	i = isatty(STDIN_FILENO);
 	free_array_dup(argv, dup);
-	return (i);
 }
 
 /**
@@ -127,7 +182,6 @@ char *clearBuffer(char *str, int counter)
 {
 	str[counter - 1] = '\0';
 	str = searchAndDestroy(str);
-	str = searchAndReplace(str);
 	return (str);
 }
 
@@ -228,10 +282,7 @@ int _checkBuiltIn(char *str)
 	if (checkExit(str) == 1)
 		return (1);
 	if (checkEnv(str) == 1)
-	{
-		printenv();
 		return (2);
-	}
 	return (0);
 }
 
@@ -294,6 +345,7 @@ int checkEnv(char *str)
 	if (strcmp(strtok(cpy, " "), "env") == 0)
 	{
 		free(cpy);
+		printenv();
 		return (1);
 	}
 	free(cpy);
@@ -338,7 +390,8 @@ int args(char *str)
  */
 void free_and_exit(char *buffer)
 {
-	dprintf(STDOUT_FILENO, "\n");
+	if (isatty(STDIN_FILENO) == 1)
+		write(STDOUT_FILENO, "\n", 1);
 	free(buffer);
 	exit(0);
 }
@@ -373,41 +426,4 @@ void printenv(void)
 	{
 		printf("%s\n", environ[i++]);
 	}
-}
-
-/**
- * string_nconcat - concatenates two strings in n bytes
- * @s1: String 1
- * @s2: String 2
- * @n: number of bytes
- *
- * Return: string concatenated
- */
-char *string_nconcat(char *s1, char *s2, unsigned int n)
-{
-	unsigned int i = 0, j = 0, x = 0, a = 0;
-	char *str;
-
-	if (s1 == NULL)
-		s1 = "";
-	if (s2 == NULL)
-		s2 = "";
-	while (s1[i])
-		i++;
-	while (s2[j])
-		j++;
-	if (n >= j)
-	{
-		n = j;
-	}
-	str = malloc(sizeof(char) * (i + n + 1));
-	if (str == NULL)
-		return (NULL);
-
-	for (x = 0; x < i; x++)
-		str[x] = s1[x];
-	for (; x < (n + i); x++, a++)
-		str[x] = s2[a];
-	str[x] = '\0';
-	return (str);
 }
