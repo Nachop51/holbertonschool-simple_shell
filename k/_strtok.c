@@ -1,4 +1,6 @@
 #include "main.h"
+#include <stddef.h>
+#include <string.h>
 
 /**
  * _strtok - strtok
@@ -10,17 +12,39 @@
 
 char *_strtok(char *str, char delim)
 {
-	char *array;
-	int i, j;
+	static char *tok1, *tok2;
+	unsigned int i;
 
-	for (i = 0; str[i]; i++)
+	if (str != NULL)
+		tok2 = str;
+	tok1 = tok2;
+	if (tok1 == NULL)
+		return (NULL);
+	for (i = 0; tok1[i] != '\0'; i++)
 	{
-		if (str[i] == delim)
-		{
-			for (j = 0; j < i; j++)
-			{
-				array[j] = str[i];
-			}
-		}
+		if (tok1[i] != delim)
+			break;
 	}
+	if (tok2[i] == '\0')
+	{
+		tok2 = NULL;
+		return (NULL);
+	}
+	tok1 = tok2 + i;
+	tok2 = tok1;
+	for (i = 0; tok2[i] != '\0'; i++)
+	{
+		if (tok2[i] == delim)
+			break;
+	}
+	if (tok2[i] == '\0')
+		tok2 = NULL;
+	else
+	{
+		tok2[i] = '\0';
+		tok2 += i + 1;
+		if (tok2[0] == '\0')
+			tok2 = NULL;
+	}
+	return (tok1);
 }

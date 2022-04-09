@@ -16,11 +16,11 @@ char **tokenize(char *str, int builtIn)
 	array = malloc(sizeof(char *) * (size + 1));
 	if (!array)
 		return (NULL);
-	token = strtok(str, " ");
+	token = _strtok(str, ' ');
 	while (token != NULL)
 	{
 		array[n] = _strdup(token);
-		token = strtok(NULL, " ");
+		token = _strtok(NULL, ' ');
 		n++;
 	}
 	if (builtIn == 0 && array[0][0] != '/')

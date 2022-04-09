@@ -13,7 +13,7 @@ char *path(char *filename)
 	char *token, *absolute;
 	struct stat st;
 
-	token = strtok(cpy, ":");
+	token = _strtok(cpy, ':');
 	concatenated = str_concat("/", filename);
 	while (token != NULL)
 	{
@@ -25,7 +25,7 @@ char *path(char *filename)
 			free(concatenated);
 			return (absolute);
 		}
-		token = strtok(NULL, ":");
+		token = _strtok(NULL, ':');
 		free(absolute);
 	}
 	free(PATH);

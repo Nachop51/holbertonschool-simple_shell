@@ -36,6 +36,7 @@ int _unsetenv(char *name);
 char *create_variable(char *name, char *value);
 void printenv(void);
 char *searchAndDestroy(char *str);
+char *_strtok(char *str, char delim);
 
 /* CHECKS */
 

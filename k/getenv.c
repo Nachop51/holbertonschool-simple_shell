@@ -16,10 +16,10 @@ char *_getenv(const char *name)
 	while (environ[i] != NULL)
 	{
 		cpy = _strdup(environ[i]);
-		token = strtok(cpy, "=");
+		token = _strtok(cpy, '=');
 		if (_strcmp(name, token) == 0)
 		{
-			token = strtok(NULL, "=");
+			token = _strtok(NULL, '=');
 			value = malloc(sizeof(char) * _strlen(token) + 1);
 			if (!value)
 				return (NULL);
