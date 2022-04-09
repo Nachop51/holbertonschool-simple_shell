@@ -5,13 +5,11 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
-#include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-extern int errno;
 extern char **environ;
 
 /**
@@ -38,6 +36,8 @@ char *_getenv(const char *name);
 void printenv(void);
 int _checkChars(char *str);
 char *path(char *filename);
+int exists(char *path);
+int is_regular_file(const char *path);
 void sig_handler(int signo);
 int _atoi(char *s);
 int checkDir(char *str);

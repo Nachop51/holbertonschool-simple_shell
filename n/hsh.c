@@ -144,7 +144,7 @@ void _isattyAndSignal(void)
 {
 	signal(SIGINT, sig_handler);
 	if ((isatty(STDIN_FILENO) == 1))
-		printf("$ ");
+		write(STDOUT_FILENO, "$ ", 3);
 }
 
 /**
