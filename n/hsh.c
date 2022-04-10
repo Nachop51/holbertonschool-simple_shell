@@ -312,11 +312,16 @@ int checkDir(char *str)
 			dir = _getenv("HOME");
 			flag++;
 		}
+		if (_strcmp(dir, "-") == 0)
+		{
+			dir = _getenv("OLDPWD");
+			flag++;
+		}
 		if (chdir(dir) != 0)
 			perror(dir);
 		builtIn++;
 	}
-	if (flag == 1)
+	if (flag > 0)
 		free(dir);
 	free(cpy);
 	return (builtIn);
@@ -400,7 +405,11 @@ int checkHelp(char *str)
 		}
 		else
 		{
-			helpCase(name);
+			while (name != NULL)
+			{
+				helpCase(name);
+				name = _strtok(NULL, ' ');
+			}
 		}
 		free(cpy);
 		return (1);
@@ -434,6 +443,10 @@ void helpCase(char *name)
 	else if (_strcmp(name, "env") == 0)
 	{
 		write(1, "env\nPrint all environment variables.\n", 38);
+	}
+	else
+	{
+		write(1, "Wrong Built-In, use help to list all Built-Ins\n", 48);
 	}
 }
 
