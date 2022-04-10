@@ -13,7 +13,7 @@ char *path(char *filename)
 	char *token = NULL, *absolute = NULL;
 	struct stat st;
 
-	token = strtok(cpy, ":");
+	token = _strtok(cpy, ':');
 	concatenated = str_concat("/", filename);
 	while (token != NULL)
 	{
@@ -25,7 +25,7 @@ char *path(char *filename)
 			free(concatenated);
 			return (absolute);
 		}
-		token = strtok(NULL, ":");
+		token = _strtok(NULL, ':');
 		free(absolute);
 	}
 	free(PATH);
@@ -83,10 +83,10 @@ char *_getenv(const char *name)
 	while (environ[i] != NULL)
 	{
 		cpy = _strdup(environ[i]);
-		token = strtok(cpy, "=");
+		token = _strtok(cpy, '=');
 		if (_strcmp(name, token) == 0)
 		{
-			token = strtok(NULL, "=");
+			token = _strtok(NULL, '=');
 			value = malloc(sizeof(char) * _strlen(token) + 1);
 			if (!value)
 			{
@@ -130,4 +130,41 @@ int _strcmp(const char *s1, const char *s2)
 	}
 	result = ss1 - ss2;
 	return (result);
+}
+
+/**
+ * _atoi - converts string to an integer
+ * @s: string
+ *
+ * Return: an integer
+ */
+int _atoi(char *s)
+{
+	char c;
+	unsigned int i, n = 0, j = _strlen(s) - 1, null = -1;
+	int flag = 0, sign = 1;
+
+	for (i = 0; i <= j; i++)
+	{
+		c = s[i];
+		if (c == '-')
+			sign *= -1;
+		if (c >= 48 && c <= 57)
+		{
+			n = n * 10 + (c - '0');
+			flag = 1;
+		}
+		if (flag == 1)
+		{
+			if (!(c >= 48 && c <= 57))
+				break;
+		}
+	}
+	if (sign == -1)
+	{
+		n *= -1;
+	}
+	if (j == null)
+		return (0);
+	return (n);
 }

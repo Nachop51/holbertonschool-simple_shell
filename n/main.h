@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <stddef.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -30,6 +31,7 @@ char *_strdup(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
+char *_strtok(char *str, char delim);
 
 void _isattyAndSignal(void);
 char *_getenv(const char *name);
@@ -50,6 +52,9 @@ int getReturnValue(char *str);
 char *clearBuffer(char *str, int counter);
 int getLineAndCheck(char *str);
 char *searchAndDestroy(char *str);
+int itsExecutable(char *str);
+int isDir(const char* fileName);
+char *addTilde(char *new);
 int child_fork(pid_t child_pid, char *name);
 int checkEnv(char *str);
 void waitAndFree(int status, char **argv, char *dup);

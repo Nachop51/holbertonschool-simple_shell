@@ -2,16 +2,15 @@
 
 /**
  * main - Recreation of a "sh"
- * 
+ *
  * Return: 0 If succeed, or the number of the error
  */
 int main(void)
 {
 	size_t i = 0;
-	int counter = 0, builtIn = 0, status = 0, returnValue = 0;
+	int counter = 0, builtIn = 0, status = 0, exitValue = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
 	pid_t child_pid;
-	struct stat st;
 
 	while (1)
 	{
@@ -25,14 +24,14 @@ int main(void)
 		builtIn = _checkBuiltIn(buffer);
 		if (builtIn == 1)
 		{
-			returnValue = getReturnValue(buffer);
-			if (returnValue >= 0)
+			exitValue = getReturnValue(buffer);
+			if (exitValue >= 0)
 				break;
 			continue;
 		}
 		dup = _strdup(buffer);
 		argv = tokenize(dup, builtIn);
-		if ((builtIn == 0 && (stat(argv[0], &st) == 0)))
+		if ((builtIn == 0 && itsExecutable(argv[0]) == 0))
 			child_pid = child_fork(child_pid, argv[0]);
 		else
 			child_pid = 1;
@@ -47,23 +46,62 @@ int main(void)
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
 	free(buffer);
-	return (returnValue);
+	return (exitValue);
 }
 
+/**
+ * itsExectuable - Checks if a given path is an executable
+ * @path: Route of the file
+ *
+ * Return: If it is an executable file or not
+ */
+int itsExecutable(char *path)
+{
+	if (isDir(path) == 0)
+	{
+		perror(NULL);
+		return (1);
+	}
+	if (access(path, X_OK))
+		return (2);
+	else
+		return (0);
+}
+
+/**
+ * isDir - Checks if the path is a directory
+ * @path: Route of the file
+ *
+ * Return: If it is a directory or not
+ */
+int isDir(const char *path)
+{
+	struct stat st = {0};
+
+	stat(path, &st);
+	return (S_ISREG(st.st_mode));
+}
+
+/**
+ * getReturnValue - Get exit value
+ * @str: String to traverse
+ *
+ * Return: The exit value
+ */
 int getReturnValue(char *str)
 {
 	char *cpy = _strdup(str), *token;
-	int returnValue = 0;
+	int exitValue = 0;
 
-	token = strtok(cpy, " ");
-	token = strtok(NULL, " ");
+	token = _strtok(cpy, ' ');
+	token = _strtok(NULL, ' ');
 	if (token == NULL)
 	{
 		free(cpy);
 		return (0);
 	}
 	if (_isdigit(token) == 0)
-		returnValue = _atoi(token);
+		exitValue = _atoi(token);
 	else
 	{
 		free(cpy);
@@ -71,19 +109,19 @@ int getReturnValue(char *str)
 		return (-1);
 	}
 	free(cpy);
-	if (returnValue < 0)
+	if (exitValue < 0)
 	{
 		write(STDERR_FILENO, "exit: Illegal number\n", 22);
-		returnValue = -1;
+		exitValue = (-1);
 	}
-	return (returnValue);
+	return (exitValue);
 }
 
 /**
- * _isdigit - prints out if it is a digit or not
- * @digit: digit to check
+ * _isdigit - Chekcs if there are only digits in a given string
+ * @str: String to traverse
  *
- * Return: 1 or 0
+ * Return: If it's only digits or not
  */
 int _isdigit(char *str)
 {
@@ -163,7 +201,7 @@ int _checkChars(char *str)
 			r = 0;
 			if (str[0] == ' ' && str[1] != ' ')
 			{
-				str = strtok(str, " ");
+				str = _strtok(str, ' ');
 			}
 			break;
 		}
@@ -182,19 +220,20 @@ char *clearBuffer(char *str, int counter)
 {
 	str[counter - 1] = '\0';
 	str = searchAndDestroy(str);
+	/*str = searchAndReplace(str);*/
 	return (str);
 }
 
-/**
+/*
  * searchAndReplace - Looks for a ~ and replaces it for the variable $HOME
  * ~/../home/shell/simple_shell/n/a.out
  * @str: String to traverse
  * Return: The modified string or just the string
- */
 char *searchAndReplace(char *str)
 {
-	int i = 0, tilde = 0, j = 0, flag = 0;
-	char *cpy = _strdup(str), *home = NULL, *concatenated = NULL, *new = NULL;
+	int i = 0, tilde = 0, flag = 0;
+	char *cpy = _strdup(str), *new = NULL, *rest = NULL, *token = NULL;
+	char *concatenated = NULL;
 
 	while (str[i])
 	{
@@ -202,38 +241,80 @@ char *searchAndReplace(char *str)
 			tilde++;
 		i++;
 	}
-	i = 0;
+	printf("Tilde:%d\n", tilde);
 	if (tilde > 0)
 	{
-		home = _getenv("HOME");
 		free(str);
-		while (cpy[j])
+		while (tilde > 0)
 		{
+			i = 0;
 			while (cpy[i])
 			{
+				printf("cpy[%d]:%c\n", i, cpy[i]);
 				if (cpy[i] == '~')
 				{
-					flag++;
-					break;
+					if (flag == 0)
+					{
+						token = strtok(cpy, "~");
+						flag++;
+					}
+					else
+					{
+						rest = strtok(NULL, "~");
+						new = addTilde(token);
+					}
 				}
-				else
-					cpy[i] = str[i];
 				i++;
 			}
-			if (flag == 1)
-			{
-				new = malloc(sizeof(i) + 1);
-				strncpy(new, str, i);
-				new[i + 1] = '\0';
-				concatenated = str_concat(new, home);
-			}
-			j++;
+			tilde--;
+			printf("Tilde:%d\n", tilde);
 		}
-		free(home);
 	}
+	printf("cpy:%s.\n", cpy);
+	str = _strdup(cpy);
 	free(cpy);
-	printf("str:%s\n", concatenated);
 	return (str);
+}*/
+
+/*char *addTilde(char *new)
+{
+	char *home = NULL, *concatenated = NULL;
+
+	printf("new:%s.\n", new);
+	home = _getenv("HOME");
+	concatenated = str_concat(new, home);
+	free(home);
+	printf("con:%s.\n", concatenated);
+	return (concatenated);
+}*/
+
+/**
+ * checkDir - Built-In checker for cd (cd function)
+ * @str: String to compare
+ *
+ * Return: If there's a coincidence or not
+ */
+int checkDir(char *str)
+{
+	char *cpy = _strdup(str), *dir = NULL;
+	int builtIn = 0, flag = 0;
+
+	if (strcmp(_strtok(cpy, ' '), "cd") == 0)
+	{
+		dir = _strtok(NULL, ' ');
+		if (dir == NULL)
+		{
+			dir = _getenv("HOME");
+			flag++;
+		}
+		if (chdir(dir) != 0)
+			perror(dir);
+		builtIn++;
+	}
+	if (flag == 1)
+		free(dir);
+	free(cpy);
+	return (builtIn);
 }
 
 /**
@@ -287,33 +368,6 @@ int _checkBuiltIn(char *str)
 }
 
 /**
- * checkDir - Built-In checker for cd (cd function)
- * @str: String to compare
- *
- * Return: If there's a coincidence or not
- */
-int checkDir(char *str)
-{
-	char *cpy = _strdup(str), *dir = NULL;
-	int flag = 0;
-
-	if (strcmp(strtok(cpy, " "), "cd") == 0)
-	{
-		dir = strtok(NULL, " ");
-		if (dir == NULL)
-			dir = _getenv("HOME");
-		if (chdir(dir) == 1)
-		{
-			perror("cd");
-			free(dir);
-		}
-		flag++;
-	}
-	free(cpy);
-	return (flag);
-}
-
-/**
  * checkExit - Built-In checker for exit
  * @str: String to compare
  *
@@ -323,7 +377,7 @@ int checkExit(char *str)
 {
 	char *cpy = _strdup(str);
 
-	if (strcmp(strtok(cpy, " "), "exit") == 0)
+	if (strcmp(_strtok(cpy, ' '), "exit") == 0)
 	{
 		free(cpy);
 		return (1);
@@ -342,7 +396,7 @@ int checkEnv(char *str)
 {
 	char *cpy = _strdup(str);
 
-	if (strcmp(strtok(cpy, " "), "env") == 0)
+	if (strcmp(_strtok(cpy, ' '), "env") == 0)
 	{
 		free(cpy);
 		printenv();
