@@ -21,7 +21,7 @@ int main(void)
 		if (_checkChars(buffer) == -1)
 			continue;
 		buffer = clearBuffer(buffer, counter);
-		builtIn = _checkBuiltIn(buffer);
+		builtIn = _checkBuiltIn(buffer); /* + array <- builtIn _atoi(newArray[0])*/
 		if (builtIn == 1)
 		{
 			exitValue = getReturnValue(buffer);
@@ -41,7 +41,7 @@ int main(void)
 			break;
 		}
 		if (child_pid != 0)
-			waitAndFree(status, argv, dup);
+			waitAndFree(status, argv, dup); /* + array + builtIn*/
 	}
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
@@ -50,7 +50,7 @@ int main(void)
 }
 
 /**
- * itsExectuable - Checks if a given path is an executable
+ * itsExecutable - Checks if a given path is an executable
  * @path: Route of the file
  *
  * Return: If it is an executable file or not
@@ -214,22 +214,24 @@ int _checkChars(char *str)
  * clearBuffer - Removes the '\n' char, and looks for tabulations
  * @str: The buffer
  * @counter: Length of the string
+ *
  * Return: The clean buffer
  */
 char *clearBuffer(char *str, int counter)
 {
 	str[counter - 1] = '\0';
 	str = searchAndDestroy(str);
-	/*str = searchAndReplace(str);*/
 	return (str);
 }
 
 /*
- * searchAndReplace - Looks for a ~ and replaces it for the variable $HOME
+ * expandTilde - Looks for a ~ and replaces it for the variable $HOME
  * ~/../home/shell/simple_shell/n/a.out
  * @str: String to traverse
+ *
  * Return: The modified string or just the string
-char *searchAndReplace(char *str)
+ *
+char *expandTilde(char *str)
 {
 	int i = 0, tilde = 0, flag = 0;
 	char *cpy = _strdup(str), *new = NULL, *rest = NULL, *token = NULL;
@@ -274,19 +276,22 @@ char *searchAndReplace(char *str)
 	str = _strdup(cpy);
 	free(cpy);
 	return (str);
-}*/
+}
+*/
 
-/*char *addTilde(char *new)
+/*
+char *addTilde(char *path)
 {
 	char *home = NULL, *concatenated = NULL;
 
-	printf("new:%s.\n", new);
+	printf("path:%s.\n", path);
 	home = _getenv("HOME");
-	concatenated = str_concat(new, home);
+	concatenated = str_concat(path, home);
 	free(home);
 	printf("con:%s.\n", concatenated);
 	return (concatenated);
-}*/
+}
+*/
 
 /**
  * checkDir - Built-In checker for cd (cd function)
@@ -358,12 +363,137 @@ char *searchAndDestroy(char *str)
  */
 int _checkBuiltIn(char *str)
 {
-	if (checkDir(str) == 1)
-		return (3);
 	if (checkExit(str) == 1)
 		return (1);
-	if (checkEnv(str) == 1)
+	if (checkDir(str) == 1)
 		return (2);
+	if (checkEnv(str) == 1)
+		return (3);
+	if (checkUnset(str) == 1)
+		return (4);
+	if (checkSetenv(str) == 1)
+		return (5);
+	if (checkHelp(str) == 1)
+		return (6);
+	return (0);
+}
+
+/**
+ * checkHelp - Built-In checker for Help
+ * @str: String to compare
+ *
+ * Return: If there's a coincidence or not
+ */
+int checkHelp(char *str)
+{
+	char *cpy = _strdup(str), *name = NULL;
+
+	if (strcmp(_strtok(cpy, ' '), "help") == 0)
+	{
+		name = _strtok(NULL, ' ');
+		if (name == NULL)
+		{
+			write(1, "Usage: help [BUILTIN]\nList of Built-Ins\n", 41);
+			write(1, "cd\nexit\nsetenv\nunsetenv\nenv\nhelp\n", 34);
+			free(cpy);
+			return (1);
+		}
+		else
+		{
+			helpCase(name);
+		}
+		free(cpy);
+		return (1);
+	}
+	free(cpy);
+	return (0);
+}
+
+void helpCase(char *name)
+{
+	if (_strcmp(name, "cd") == 0)
+	{
+		write(1, "cd [dir]\nChange the shell working directory.\n", 46);
+	}
+	else if (_strcmp(name, "exit") == 0)
+	{
+		write(1, "exit [n]\nExits the shell with a status of N.\n", 46);
+	}
+	else if (_strcmp(name, "setenv") == 0)
+	{
+		write(1, "setenv [var] [value]\nSet environment variables.\n", 49);
+	}
+	else if (_strcmp(name, "unsetenv") == 0)
+	{
+		write(1, "unsetenv [var]\nUnset environment variables.\n", 45);
+	}
+	else if (_strcmp(name, "help") == 0)
+	{
+		write(1, "help [BUILTIN]\nDisplays information for Buitlt-Ins.\n", 53);
+	}
+	else if (_strcmp(name, "env") == 0)
+	{
+		write(1, "env\nPrint all environment variables.\n", 38);
+	}
+}
+
+/**
+ * checkSetenv - Built-In checker for setenv
+ * @str: String to compare
+ *
+ * Return: If there's a coincidence or not
+ */
+int checkSetenv(char *str)
+{
+	char *cpy = _strdup(str), *name = NULL, *value = NULL;
+
+	if (strcmp(_strtok(cpy, ' '), "setenv") == 0)
+	{
+		name = _strtok(NULL, ' ');
+		value = _strtok(NULL, ' ');
+		if (name == NULL || value == NULL)
+		{
+			write(STDERR_FILENO, "Usage: setenv [VARIABLE] [VALUE]\n", 34);
+			free(cpy);
+			return (1);
+		}
+		_setenv(name, value, 1);
+		free(cpy);
+		return (1);
+	}
+	free(cpy);
+	return (0);
+}
+
+/**
+ * checkUnset - Built-In checker for unsetenv
+ * @str: String to compare
+ *
+ * Return: If there's a coincidence or not
+ */
+int checkUnset(char *str)
+{
+	char *cpy = _strdup(str), *token = NULL;
+
+	if (strcmp(_strtok(cpy, ' '), "unsetenv") == 0)
+	{
+		token = _strtok(NULL, ' ');
+		if (token == NULL)
+		{
+			write(STDERR_FILENO, "Usage: unsetenv [VARIABLE]\n", 28);
+			free(cpy);
+			return (1);
+		}
+		if (_unsetenv(token) == -1)
+		{
+			write(STDERR_FILENO, "can't unset non-existent variable\n", 35);
+			free(cpy);
+			return (1);
+		}
+		free(cpy);
+		return (1);
+	}
+	free(cpy);
 	return (0);
 }
 
@@ -412,7 +542,7 @@ int checkEnv(char *str)
  */
 void sig_handler(__attribute__((unused))int signo)
 {
-	dprintf(STDOUT_FILENO, "\n$ ");
+	write(STDOUT_FILENO, "\n$ ", 1);
 }
 
 /**
@@ -467,6 +597,7 @@ void free_array_dup(char **array, char *dup)
 	free(array[i]);
 	free(array);
 	free(dup);
+
 }
 
 /**
