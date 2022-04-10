@@ -34,7 +34,7 @@ char **tokenize(char *str, int builtIn)
 		}
 		else
 		{
-			if (stat(array[0], &st))
+			if ((stat(array[0], &st) == 0) || (isDir(array[0]) == 0))
 				;
 			else
 				perror(array[0]);

@@ -59,13 +59,35 @@ int itsExecutable(char *path)
 {
 	if (isDir(path) == 0)
 	{
-		perror(NULL);
+		if (path[0] == '/')
+			perror(path);
+		else
+			perror(last(path));
 		return (1);
 	}
 	if (access(path, X_OK))
 		return (2);
 	else
 		return (0);
+}
+
+char *last(char *str)
+{
+	char *cpy = _strdup(str), *token = NULL, *value = NULL;
+
+	token = _strtok(cpy, '/');
+	if (token == NULL)
+	{
+		value = str;
+		free(cpy);
+		return (value);
+	}
+	while (token != NULL)
+	{
+		value = token;
+		token = _strtok(NULL, '/');
+	}
+	return (value);
 }
 
 /**
@@ -555,7 +577,7 @@ int checkEnv(char *str)
  */
 void sig_handler(__attribute__((unused))int signo)
 {
-	write(STDOUT_FILENO, "\n$ ", 1);
+	write(STDOUT_FILENO, "\n$ ", 4);
 }
 
 /**

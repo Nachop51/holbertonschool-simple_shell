@@ -57,6 +57,7 @@ char *create_variable(char *name, char *value);
 int getReturnValue(char *str);
 char *clearBuffer(char *str, int counter);
 void helpCase(char *name);
+char *last(char *str);
 int getLineAndCheck(char *str);
 void free_environ(char *var_name);
 char *searchAndDestroy(char *str);
