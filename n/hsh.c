@@ -71,7 +71,7 @@ int itsExecutable(char *path)
 		return (0);
 }
 
-char *last(char *str)
+char *printError(char *str)
 {
 	char *cpy = _strdup(str), *token = NULL, *value = NULL;
 
