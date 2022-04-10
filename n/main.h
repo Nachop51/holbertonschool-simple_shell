@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <stddef.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -30,6 +31,7 @@ char *_strdup(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *str_concat(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
+char *_strtok(char *str, char delim);
 
 void _isattyAndSignal(void);
 char *_getenv(const char *name);
@@ -37,6 +39,11 @@ void printenv(void);
 int _checkChars(char *str);
 char *path(char *filename);
 int exists(char *path);
+int _setenv(char *name, char *value, int overwrite);
+int checkUnset(char *str);
+int checkSetenv(char *str);
+int checkHelp(char *str);
+int _unsetenv(char *name);
 int is_regular_file(const char *path);
 void sig_handler(int signo);
 int _atoi(char *s);
@@ -46,10 +53,17 @@ int _isdigit(char *str);
 int checkExit(char *str);
 char *searchAndReplace(char *str);
 int checkRoute(char *str);
+char *create_variable(char *name, char *value);
 int getReturnValue(char *str);
 char *clearBuffer(char *str, int counter);
+void helpCase(char *name);
+char *last(char *str);
 int getLineAndCheck(char *str);
+void free_environ(char *var_name);
 char *searchAndDestroy(char *str);
+int itsExecutable(char *str);
+int isDir(const char *fileName);
+char *addTilde(char *path);
 int child_fork(pid_t child_pid, char *name);
 int checkEnv(char *str);
 void waitAndFree(int status, char **argv, char *dup);
