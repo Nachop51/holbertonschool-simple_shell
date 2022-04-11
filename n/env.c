@@ -49,6 +49,8 @@ int _setenv(char *name, char *value, int overwrite)
 	{
 		if ((strncmp(environ[i], name, len) == 0) && overwrite != 0)
 		{
+			if (overwrite == 2)
+				free(environ[i]);
 			environ[i] = create_variable(name, value);
 			if (!environ[i])
 				return (-1);
@@ -104,4 +106,31 @@ void free_environ(char *var_name)
 		}
 		i++;
 	}
+}
+
+/**
+ * _strncpy - copy a string
+ * @dest: string dest
+ * @src: string to cpy
+ * @n: bytes
+ *
+ * Return: copy a string to dest
+ */
+char *_strncpy(char *dest, char *src, int n)
+{
+	int i, a = 0;
+
+	for (i = 0; i < n; i++)
+	{
+		if (src[i] == '\0')
+			a = 1;
+		if (a == 0)
+			dest[i] = src[i];
+		else
+		{
+			dest[i] = '\0';
+		}
+	}
+
+	return (dest);
 }

@@ -8,9 +8,9 @@
 int main(void)
 {
 	size_t i = 0;
-	int counter = 0, builtIn = 0, status = 0, exitValue = 0;
+	int counter = 0, builtIn = 0, status = 0, exitValue = 0, child_pid = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
-	pid_t child_pid;
+	_setenv("OLDPWD", " ", 1);
 
 	while (1)
 	{
@@ -45,8 +45,14 @@ int main(void)
 	}
 	if (builtIn != 1)
 		free_array_dup(argv, dup);
-	free(buffer);
+	free_buff_and_env(buffer);
 	return (exitValue);
+}
+
+void free_buff_and_env(char *str)
+{
+	free(str);
+	free_environ("OLDPWD");
 }
 
 /**
@@ -62,32 +68,13 @@ int itsExecutable(char *path)
 		if (path[0] == '/')
 			perror(path);
 		else
-			perror(last(path));
+			perror(path);
 		return (1);
 	}
 	if (access(path, X_OK))
 		return (2);
 	else
 		return (0);
-}
-
-char *printError(char *str)
-{
-	char *cpy = _strdup(str), *token = NULL, *value = NULL;
-
-	token = _strtok(cpy, '/');
-	if (token == NULL)
-	{
-		value = str;
-		free(cpy);
-		return (value);
-	}
-	while (token != NULL)
-	{
-		value = token;
-		token = _strtok(NULL, '/');
-	}
-	return (value);
 }
 
 /**
@@ -216,9 +203,11 @@ int _checkChars(char *str)
 {
 	int i = 0, r = -1;
 
+	if (str[0] == '#')
+		return (-1);
 	while (str[i])
 	{
-		if (str[i] != 32 && str[i] != 10 && str[i] != '\t')
+		if (str[i] != 32 && str[i] != 10 && str[i] != '\t' && str[i] != '#')
 		{
 			r = 0;
 			if (str[0] == ' ' && str[1] != ' ')
@@ -243,6 +232,42 @@ char *clearBuffer(char *str, int counter)
 {
 	str[counter - 1] = '\0';
 	str = searchAndDestroy(str);
+	str = comments(str);
+	return (str);
+}
+
+char *comments(char *str)
+{
+	char *cpy = NULL;
+	int i = 0, j = 0, hashtag = 0;
+
+	while (str[j])
+	{
+		if (str[j] == '#')
+			hashtag++;
+		j++;
+	}
+	if (hashtag == 0)
+		return (str);
+	else
+	{
+		cpy = _strdup(str);
+		while (cpy[i])
+		{
+			if (cpy[i] == '#')
+			{
+				free(str);
+				str = malloc(sizeof(char) * i);
+				_strncpy(str, cpy, i);
+				str[i] = '\0';
+				printf("str:%s.\n", str);
+				break;
+			}
+			i++;
+		}
+		free(cpy);
+	}
+	printf("str:%s.\n", str);
 	return (str);
 }
 
@@ -323,8 +348,9 @@ char *addTilde(char *path)
  */
 int checkDir(char *str)
 {
-	char *cpy = _strdup(str), *dir = NULL;
+	char *cpy = _strdup(str), *dir = NULL, *CWD = NULL, *buffer = NULL;
 	int builtIn = 0, flag = 0;
+	size_t i = 0;
 
 	if (strcmp(_strtok(cpy, ' '), "cd") == 0)
 	{
@@ -339,6 +365,8 @@ int checkDir(char *str)
 			dir = _getenv("OLDPWD");
 			flag++;
 		}
+		CWD = getcwd(buffer, i);
+		_setenv("OLDPWD", CWD, 2);
 		if (chdir(dir) != 0)
 			perror(dir);
 		builtIn++;
@@ -346,6 +374,8 @@ int checkDir(char *str)
 	if (flag > 0)
 		free(dir);
 	free(cpy);
+	free(buffer);
+	free(CWD);
 	return (builtIn);
 }
 
@@ -390,10 +420,10 @@ char *searchAndDestroy(char *str)
  */
 int _checkBuiltIn(char *str)
 {
-	if (checkExit(str) == 1)
-		return (1);
 	if (checkDir(str) == 1)
 		return (2);
+	if (checkExit(str) == 1)
+		return (1);
 	if (checkEnv(str) == 1)
 		return (3);
 	if (checkUnset(str) == 1)
@@ -612,6 +642,7 @@ void free_and_exit(char *buffer)
 	if (isatty(STDIN_FILENO) == 1)
 		write(STDOUT_FILENO, "\n", 1);
 	free(buffer);
+	free_environ("OLDPWD");
 	exit(0);
 }
 
