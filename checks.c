@@ -38,7 +38,6 @@ int checkDir(char *str)
 {
 	char *cpy = _strdup(str), *dir = NULL, *PWD = NULL, *buffer = NULL;
 	int builtIn = 0, flag = 0;
-	size_t i = 0;
 
 	if (_strcmp(_strtok(cpy, ' '), "cd") == 0)
 	{
