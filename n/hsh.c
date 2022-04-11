@@ -10,8 +10,8 @@ int main(void)
 	size_t i = 0;
 	int counter = 0, builtIn = 0, status = 0, exitValue = 0, child_pid = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
-	_setenv("OLDPWD", " ", 1);
 
+	_setenv("OLDPWD", " ", 1);
 	while (1)
 	{
 		_isattyAndSignal();
@@ -238,6 +238,12 @@ char *clearBuffer(char *str, int counter)
 	return (str);
 }
 
+/**
+ * comments - Checks for comments
+ * @str: String to traverse
+ *
+ * Return: The clean string in case of comments, if not, the same one
+ */
 char *comments(char *str)
 {
 	int i = 0, j = 0, hashtag = 0, flag = 0;
@@ -475,6 +481,10 @@ int checkHelp(char *str)
 	return (0);
 }
 
+/**
+ * helpCase - Prints out a shor help message
+ * @name: Name of the Built-In
+ */
 void helpCase(char *name)
 {
 	if (_strcmp(name, "cd") == 0)
