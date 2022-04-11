@@ -204,7 +204,7 @@ int _checkChars(char *str)
 	int i = 0, r = -1;
 
 	if (str[0] == '#')
-		return (-1);
+		return (r);
 	while (str[i])
 	{
 		if (str[i] != 32 && str[i] != 10 && str[i] != '\t' && str[i] != '#')
@@ -216,6 +216,8 @@ int _checkChars(char *str)
 			}
 			break;
 		}
+		if (str[i] == '#')
+			break;
 		i++;
 	}
 	return (r);
@@ -238,36 +240,39 @@ char *clearBuffer(char *str, int counter)
 
 char *comments(char *str)
 {
-	char *cpy = NULL;
-	int i = 0, j = 0, hashtag = 0;
+	int i = 0, j = 0, hashtag = 0, flag = 0;
 
 	while (str[j])
 	{
-		if (str[j] == '#')
+		if (str[j] == ' ' && str[j + 1] == '#')
+		{
 			hashtag++;
+			break;
+		}
 		j++;
 	}
 	if (hashtag == 0)
 		return (str);
 	else
 	{
-		cpy = _strdup(str);
-		while (cpy[i])
+		while (str[i])
 		{
-			if (cpy[i] == '#')
+			if (flag == 1)
 			{
-				free(str);
-				str = malloc(sizeof(char) * i);
-				_strncpy(str, cpy, i);
-				str[i] = '\0';
-				printf("str:%s.\n", str);
-				break;
+				str[i] = ' ';
+				i++;
+				continue;
+			}
+			if (str[i] == ' ' && str[i + 1] == '#')
+			{
+				flag++;
+				i++;
+				continue;
 			}
 			i++;
 		}
-		free(cpy);
+		printf("str:%s.\n", str);
 	}
-	printf("str:%s.\n", str);
 	return (str);
 }
 
@@ -352,7 +357,7 @@ int checkDir(char *str)
 	int builtIn = 0, flag = 0;
 	size_t i = 0;
 
-	if (strcmp(_strtok(cpy, ' '), "cd") == 0)
+	if (_strcmp(_strtok(cpy, ' '), "cd") == 0)
 	{
 		dir = _strtok(NULL, ' ');
 		if (dir == NULL)
@@ -445,7 +450,7 @@ int checkHelp(char *str)
 {
 	char *cpy = _strdup(str), *name = NULL;
 
-	if (strcmp(_strtok(cpy, ' '), "help") == 0)
+	if (_strcmp(_strtok(cpy, ' '), "help") == 0)
 	{
 		name = _strtok(NULL, ' ');
 		if (name == NULL)
