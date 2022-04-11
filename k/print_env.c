@@ -5,10 +5,7 @@
  *
  * Return: void
  */
-void main()
-{
-	printenv();
-}
+
 void printenv(void)
 {
 	int i = 0;

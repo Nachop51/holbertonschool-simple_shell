@@ -20,12 +20,12 @@ char *_strtok(char *str, char delim)
 	tok1 = tok2;
 	if (tok1 == NULL)
 		return (NULL);
-	for (i = 0; tok1[i] != '\0'; i++)
+	for (i = 0; tok1[i] != '\0' || tok1[i] != '#'; i++)
 	{
 		if (tok1[i] != delim)
 			break;
 	}
-	if (tok2[i] == '\0')
+	if (tok2[i] == '\0' || tok2[i] == '#')
 	{
 		tok2 = NULL;
 		return (NULL);
@@ -37,7 +37,7 @@ char *_strtok(char *str, char delim)
 		if (tok2[i] == delim)
 			break;
 	}
-	if (tok2[i] == '\0')
+	if (tok2[i] == '\0' || tok2[i] == '#')
 		tok2 = NULL;
 	else
 	{
