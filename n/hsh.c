@@ -49,6 +49,10 @@ int main(void)
 	return (exitValue);
 }
 
+/**
+ * free_buff_and_env - Frees the buffer and an environ variable
+ * @str: Buffer to free
+ */
 void free_buff_and_env(char *str)
 {
 	free(str);
@@ -259,97 +263,24 @@ char *comments(char *str)
 	}
 	if (hashtag == 0)
 		return (str);
-	else
-	{
-		while (str[i])
-		{
-			if (flag == 1)
-			{
-				str[i] = ' ';
-				i++;
-				continue;
-			}
-			if (str[i] == ' ' && str[i + 1] == '#')
-			{
-				flag++;
-				i++;
-				continue;
-			}
-			i++;
-		}
-		printf("str:%s.\n", str);
-	}
-	return (str);
-}
-
-/*
- * expandTilde - Looks for a ~ and replaces it for the variable $HOME
- * ~/../home/shell/simple_shell/n/a.out
- * @str: String to traverse
- *
- * Return: The modified string or just the string
- *
-char *expandTilde(char *str)
-{
-	int i = 0, tilde = 0, flag = 0;
-	char *cpy = _strdup(str), *new = NULL, *rest = NULL, *token = NULL;
-	char *concatenated = NULL;
-
 	while (str[i])
 	{
-		if (str[i] == '~')
-			tilde++;
+		if (flag == 1)
+		{
+			str[i] = ' ';
+			i++;
+			continue;
+		}
+		if (str[i] == ' ' && str[i + 1] == '#')
+		{
+			flag++;
+			i++;
+			continue;
+		}
 		i++;
 	}
-	printf("Tilde:%d\n", tilde);
-	if (tilde > 0)
-	{
-		free(str);
-		while (tilde > 0)
-		{
-			i = 0;
-			while (cpy[i])
-			{
-				printf("cpy[%d]:%c\n", i, cpy[i]);
-				if (cpy[i] == '~')
-				{
-					if (flag == 0)
-					{
-						token = strtok(cpy, "~");
-						flag++;
-					}
-					else
-					{
-						rest = strtok(NULL, "~");
-						new = addTilde(token);
-					}
-				}
-				i++;
-			}
-			tilde--;
-			printf("Tilde:%d\n", tilde);
-		}
-	}
-	printf("cpy:%s.\n", cpy);
-	str = _strdup(cpy);
-	free(cpy);
 	return (str);
 }
-*/
-
-/*
-char *addTilde(char *path)
-{
-	char *home = NULL, *concatenated = NULL;
-
-	printf("path:%s.\n", path);
-	home = _getenv("HOME");
-	concatenated = str_concat(path, home);
-	free(home);
-	printf("con:%s.\n", concatenated);
-	return (concatenated);
-}
-*/
 
 /**
  * checkDir - Built-In checker for cd (cd function)
@@ -690,6 +621,8 @@ void printenv(void)
 
 	while (environ[i])
 	{
-		printf("%s\n", environ[i++]);
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 2);
+		i++;
 	}
 }
