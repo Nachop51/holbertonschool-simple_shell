@@ -1,16 +1,16 @@
 #include "main.h"
 
 /**
- * path - cecks if a file exists
+ * path - Checks if a file exists
  * @filename: name of the file
  *
- * Return: Absolute route of a file or NULL
+ * Return: Returns the absolute route of a file or NULL
  */
 char *path(char *filename)
 {
 	char *PATH = _getenv("PATH");
-	char *cpy = _strdup(PATH), *concatenated;
-	char *token, *absolute;
+	char *cpy = _strdup(PATH), *concatenated = NULL;
+	char *token = NULL, *absolute = NULL;
 	struct stat st;
 
 	token = _strtok(cpy, ':');

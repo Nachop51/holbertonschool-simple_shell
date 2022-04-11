@@ -1,16 +1,17 @@
 #include "main.h"
 
 /**
- * tokenize - tokenizer
- * @str: str
- * @builtIn: built-in
+ * tokenize - Tokenizes a given string
+ * @str: String to tokenize
+ * @builtIn: Indicates if there's a built-in or not
  *
- * Return: list_t
+ * Return: An array of tokenized strings
  */
 char **tokenize(char *str, int builtIn)
 {
 	char *token = NULL, **array = NULL, *test = NULL;
 	int size = 0, n = 0;
+	struct stat st = {0};
 
 	size = args(str);
 	array = malloc(sizeof(char *) * (size + 1));
@@ -32,7 +33,12 @@ char **tokenize(char *str, int builtIn)
 			array[0] = _strdup(test);
 		}
 		else
-			perror(array[0]);
+		{
+			if ((stat(array[0], &st) == 0) || (isDir(array[0]) == 0))
+				;
+			else
+				perror(array[0]);
+		}
 		free(test);
 	}
 	array[n] = NULL;
