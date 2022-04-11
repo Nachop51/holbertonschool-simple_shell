@@ -1,0 +1,61 @@
+.TH hsh 1 "10 April 2022" "1.0" "Simple Shell"
+.SH NAME
+hsh - command interpreter (shell)
+.SH SYNOPSIS
+hsh
+.SH DESCRIPTION
+.B hsh
+is a copy of the standard command interpreter for the system. This project is made for learning purposes. Made by Holberton School.
+.SH OPTIONS
+.SS Overview
+The shell is a command that reads lines from either a file or the terminal, interprets them, and generally executes other commands. Has an non-interactive mode, commands can be typed directly to the running shell or can be put into a file and the file can be executed directly by the shell.
+.SS Search and Execution
+There are three types of commands: shell functions, builtin commands, and normal programs. They each are executed in a different way.
+Shell builtins are executed internally to the shell, without spawning a new process.
+If the command name doesn't match a function or builtin, the command is searched for as a normal program in the file system.
+.SS Path Search
+When locating a command, the shell first looks to see if it has a shell function by that name. Then it looks for a builtin command by that name. If a builtin command is not found, one of two things happen:
+
+1. Command names containing a slash are simply executed without performing any searches.
+
+2. The shell searches each entry in PATH in turn for the command. The value of the PATH variable should be a series of entries separated by colons. Each entry consists of a directory name. The current directory may be indicated implicitly by an empty directory name, or explicitly by a single period.
+.SS Command Exit Status
+Each command has an exit status.
+.SS Builtins
+This section lists the builtin commands which are builtin because they need to perform some operation that can't be performed by a separate process.
+.TP
+.I exit
+Exits the shell
+.TP
+.I env
+Prints the current environment
+.TP
+.I setenv
+Initialize a new environment variable, or modify an existing one
+.TP
+.I unsetenv
+Remove an environment variable
+.TP
+.I cd
+Changes the current directory of the process
+.TP
+.I alias
+Prints a list of all aliases
+.TP
+.I help
+Displays the help page
+.TP
+.I history
+Displays the history list
+.SS Environment
+PATH' The default search path for executables.
+
+PWD' The logical value of the current working directory. This is set by the cd command.
+
+OLDPWD' The previous logical value of the current working directory. This is set by the cd command.
+.SH SEE ALSO
+dash(1)
+.SH BUGS
+Not known.
+.SH AUTHOR
+Nacho Peralta & Kevin Fundora

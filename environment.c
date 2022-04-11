@@ -9,8 +9,8 @@ void printenv(void)
 
 	while (environ[i])
 	{
-		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
-		write(STDOUT_FILENO, "\n", 1);
+		write(1, environ[i], _strlen(environ[i]));
+		write(1, "\n", 1);
 		i++;
 	}
 }
@@ -25,7 +25,7 @@ int _unsetenv(char *name)
 	size_t len = 0;
 	int i = 0, flag = 0;
 
-	len = strlen(name);
+	len = _strlen(name);
 	while (environ[i] != NULL)
 	{
 		if (strncmp(environ[i], name, len) == 0)
@@ -58,13 +58,15 @@ int _setenv(char *name, char *value, int overwrite)
 	size_t len;
 	int i = 0;
 
-	len = strlen(name);
+	len = _strlen(name);
 	while (environ[i] != NULL)
 	{
 		if ((strncmp(environ[i], name, len) == 0) && overwrite != 0)
 		{
 			if (overwrite == 2)
+			{
 				free(environ[i]);
+			}
 			environ[i] = create_variable(name, value);
 			if (!environ[i])
 				return (-1);
@@ -125,7 +127,7 @@ char *_getenv(const char *name)
 				free(cpy);
 				return (NULL);
 			}
-			strcpy(value, token);
+			_strcpy(value, token);
 			free(cpy);
 			break;
 		}

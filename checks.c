@@ -37,6 +37,7 @@ int _checkChars(char *str)
 int checkDir(char *str)
 {
 	char *cpy = _strdup(str), *dir = NULL, *CWD = NULL, *buffer = NULL;
+	char *new = NULL, *buffer2 = NULL;
 	int builtIn = 0, flag = 0;
 	size_t i = 0;
 
@@ -57,12 +58,16 @@ int checkDir(char *str)
 		_setenv("OLDPWD", CWD, 2);
 		if (chdir(dir) != 0)
 			perror(dir);
+		new = getcwd(buffer2, i);
+		_setenv("PWD", new, 2);
 		builtIn++;
 	}
 	if (flag > 0)
 		free(dir);
 	free(cpy);
 	free(buffer);
+	free(new);
+	free(buffer2);
 	free(CWD);
 	return (builtIn);
 }
