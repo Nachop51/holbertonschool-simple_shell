@@ -7,6 +7,7 @@
 void free_buff_and_env(char *str)
 {
 	free(str);
+	free_environ("OLDPWD");
 }
 /**
  * waitAndFree - Waits and frees things
@@ -30,6 +31,7 @@ void free_and_exit(char *buffer)
 	if (isatty(STDIN_FILENO) == 1)
 		write(STDOUT_FILENO, "\n", 1);
 	free(buffer);
+	free_environ("OLDPWD");
 	exit(0);
 }
 /**

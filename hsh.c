@@ -11,6 +11,7 @@ int main(void)
 	int counter = 0, builtIn = 0, status = 0, exitValue = 0, child_pid = 0;
 	char *buffer = NULL, **argv = NULL, *dup = NULL;
 
+	_setenv("OLDPWD", NULL, 1);
 	while (1)
 	{
 		_isattyAndSignal();
